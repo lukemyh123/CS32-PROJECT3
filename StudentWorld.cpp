@@ -1,5 +1,6 @@
 #include "StudentWorld.h"
 #include "GameConstants.h"
+
 #include <string>
 using namespace std;
 
@@ -17,6 +18,12 @@ StudentWorld::StudentWorld(string assetPath)
 
 int StudentWorld::init()
 {
+	m_actors.push_back(new Wall(55, 100, this));
+	m_actors.push_back(new Wall(100, 200, this));
+
+	//m_penelope = new Penelope(SPRITE_WIDTH * level_x, SPRITE_HEIGHT * level_y);
+	m_penelope = new Penelope(80, 80, this);
+
     return GWSTATUS_CONTINUE_GAME;
 }
 
@@ -24,10 +31,21 @@ int StudentWorld::move()
 {
     // This code is here merely to allow the game to build, run, and terminate after you hit enter.
     // Notice that the return value GWSTATUS_PLAYER_DIED will cause our framework to end the current level.
-    decLives();
-    return GWSTATUS_PLAYER_DIED;
+    //decLives();
+	m_penelope->doSomething();
+
+    return GWSTATUS_CONTINUE_GAME;
 }
 
 void StudentWorld::cleanUp()
 {
+	delete m_penelope;
+	vector<Actor*>::iterator it;
+	for (it = m_actors.begin(); it != m_actors.end();)
+	{
+		delete *it;
+		it = m_actors.erase(it);
+		it++;
+	}
+
 }
