@@ -14,6 +14,7 @@ public:
 	bool isDead() { return object_dead; }
 	virtual void setDead() { object_dead = true; }
 	StudentWorld * getWorld() { return s_world; }
+	virtual bool isBlockActor() = 0;
 	~Actor();
 private:
 	bool object_dead = false;
@@ -25,6 +26,8 @@ class Penelope : public Actor
 public:
 	Penelope(double startX, double startY, StudentWorld *this_world);
 	virtual void doSomething();
+	virtual bool isBlockActor() { return true; }
+
 private:
 };
 
@@ -33,6 +36,7 @@ class Wall : public Actor
 public:
 	Wall(double startX, double startYh, StudentWorld *this_world);
 	virtual void doSomething() {}
+	virtual bool isBlockActor() { return true; };
 private:
 };
 
