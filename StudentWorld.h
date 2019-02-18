@@ -18,8 +18,8 @@ public:
     virtual int move();
     virtual void cleanUp();
 
-	bool check_collision(int next_x, int next_y);
-	bool overlapWithExit(Actor* a_actor) { return false; }
+	bool check_collision(double next_x, double next_y);
+	bool overlapWithExit(double exit_x, double exit_y);
 	void setGame_info();
 
 

@@ -1,4 +1,4 @@
-#include "StudentWorld.h"
+﻿#include "StudentWorld.h"
 #include "GameConstants.h"
 #include <sstream>   //ostringstream
 #include <string>
@@ -48,26 +48,35 @@ int StudentWorld::move()
     //decLives();
 	setGame_info();
 	m_penelope->doSomething();
+	vector<Actor*>::iterator it;  //delete all actors
+	for (it = m_actors.begin(); it != m_actors.end(); it++)
+	{
+		(*it)->doSomething();
+	}
+
+	if (getLevel() == 2)
+		return GWSTATUS_FINISHED_LEVEL;
+	
     return GWSTATUS_CONTINUE_GAME;
 }
 
 void StudentWorld::cleanUp()
 {
-	if(m_penelope != nullptr)
+	//if(m_penelope != nullptr)
 		delete m_penelope;  //delete player
 	vector<Actor*>::iterator it;  //delete all actors
-	if (m_actors.size() != 0)
-	{
+	//if (m_actors.size() != 0)
+	//{
 		for (it = m_actors.begin(); it != m_actors.end();)
 		{
 			delete *it;
 			it = m_actors.erase(it);
 			it++;
 		}
-	}
+	//}
 }
 
-bool StudentWorld::check_collision(int next_x, int next_y)
+bool StudentWorld::check_collision(double next_x, double next_y)
 {
 	vector<Actor*>::iterator it;
 	for (it = m_actors.begin(); it != m_actors.end();it++)
@@ -86,14 +95,17 @@ bool StudentWorld::check_collision(int next_x, int next_y)
 	return false;
 }
 
-/*bool StudentWorld::overlapWithExit(Actor* a_actor)    //check if any actors are overlap with Exit
+bool StudentWorld::overlapWithExit(double exit_x, double exit_y)    //check if any actors are overlap with Exit
 {
 	vector<Actor*>::iterator it;
-	for (it = m_actors.begin(); it != m_actors.end(); it++)
-	{
-		if((*it)->)
-	}
-}*/
+	double player_x = m_penelope->getX();
+	double player_y = m_penelope->getY(); 
+	
+	if (pow(player_x - exit_x, 2) + pow(player_y - exit_y, 2) <= 100)  //overlap(x1-x2)^2 + (y1-y2)^2 ≤ 10^2
+		return true;
+
+	return false;
+}
 
 void StudentWorld::setGame_info()
 {
@@ -109,7 +121,12 @@ void StudentWorld::setGame_info()
 std::string StudentWorld::check_actorsPos(int x, int y)
 {
 	Level lev(assetPath());
-	string levelFile = "level02.txt";  //getLevel()
+	string levelFile;
+	if(getLevel() == 1)
+		levelFile = "level01.txt";  //getLevel()
+	if(getLevel() == 2)
+		levelFile = "level02.txt";  //getLevel()
+
 	Level::LoadResult result = lev.loadLevel(levelFile);
 	if (result == Level::load_fail_file_not_found)
 		cerr << "Cannot find level01.txt data file" << endl;

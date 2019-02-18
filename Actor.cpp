@@ -56,5 +56,7 @@ Exit::Exit(double startX, double startY, StudentWorld *this_world)
 
 void Exit::doSomething()
 {
+	if (getWorld()->overlapWithExit(getX(), getY()) == true)
+		getWorld()->advanceToNextLevel();
 
 }
