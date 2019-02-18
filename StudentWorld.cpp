@@ -16,13 +16,20 @@ StudentWorld::StudentWorld(string assetPath)
 
 StudentWorld::~StudentWorld()
 {
-	cleanUp();
+	//cleanUp();
 }
 
 int StudentWorld::init()
 {
 	//advanceToNextLevel();
 	//int level = getLevel();
+
+	/*m_actors.push_back(new Wall(SPRITE_WIDTH * 5, SPRITE_HEIGHT * 1, this));
+	m_actors.push_back(new Wall(SPRITE_WIDTH * 1, SPRITE_HEIGHT * 1, this));
+	m_actors.push_back(new Wall(SPRITE_WIDTH * 4, SPRITE_HEIGHT * 6, this));
+	m_actors.push_back(new Wall(SPRITE_WIDTH * 5, SPRITE_HEIGHT * 6, this));
+
+	m_penelope = new Penelope(SPRITE_WIDTH * 3, SPRITE_HEIGHT * 4, this);*/
 
 	for (int x = 0; x < SPRITE_WIDTH; x++)
 	{
@@ -45,7 +52,6 @@ int StudentWorld::move()
     // Notice that the return value GWSTATUS_PLAYER_DIED will cause our framework to end the current level.
     //decLives();
 	m_penelope->doSomething();
-	vector<Actor*>::iterator it;
     return GWSTATUS_CONTINUE_GAME;
 }
 
@@ -61,6 +67,63 @@ void StudentWorld::cleanUp()
 	}
 }
 
+void StudentWorld::check_collision(int next_x, int next_y)
+{
+	vector<Actor*>::iterator it;
+
+	set_left(false); set_right(false); set_up(false); set_down(false);
+
+	cout << "+++++++++++++++++++++++++++++++++++" << endl;
+	cout << "PLAY_X " << m_penelope->getX() << " ";
+	//cout << "PLAY_Y " << m_penelope->getY() << endl;
+	for (it = m_actors.begin(); it != m_actors.end();it++)
+	{		
+		if ((*it)->isBlockActor() == true)  //check whether the actors are bounder box
+		{    
+			if ((m_penelope->getX() + SPRITE_WIDTH-1) >= ((*it)->getX())
+				&& (m_penelope->getX()) <= ((*it)->getX() + SPRITE_WIDTH-1)
+				&& (m_penelope->getY() + SPRITE_HEIGHT-1) >= ((*it)->getY())
+				&& (m_penelope->getY()) <= ((*it)->getY() + SPRITE_HEIGHT-1))
+				{
+					cout << "true" << endl;
+					//cout << "PLAY_X " << m_penelope->getX() << " ";
+					//cout << "PLAY_Y " << m_penelope->getY() << endl;
+					cout << "Wall_X " << (*it)->getX() << " ";
+					cout << "Wall_Y " << (*it)->getY() << endl;
+					
+
+					if (m_penelope->getX()+4 == (*it)->getX() + SPRITE_WIDTH)  //the blocking is on the left
+					{
+						cout << "Left" << endl;
+						set_left(true); //set_right(false); set_up(false); set_down(false);
+					}
+					if (m_penelope->getX() + SPRITE_WIDTH-4 == (*it)->getX())  //the blocking is on the right
+					{
+						cout << "right" << endl;
+						//set_left(false); set_right(true); set_up(false); set_down(false);
+						set_right(true);
+					}
+					
+					if (m_penelope->getY() + 4 == (*it)->getY() + SPRITE_HEIGHT)   //the blocking is on the down
+					{
+						cout << "down" << endl;
+						//set_left(false); set_right(false); set_up(false); set_down(true);
+						set_down(true);
+					}
+					
+					if (m_penelope->getY() + SPRITE_HEIGHT - 4 == (*it)->getY())  //the blocking is on the up
+					{
+						cout << "up" << endl;
+						//set_left(false); set_right(false); set_up(true); set_down(false);
+						set_up(true);
+					}
+					
+				}
+			//else
+				//set_left(false); set_right(false); set_up(false); set_down(false);  //no blockings arround*/
+		}
+	}
+}
 
 std::string StudentWorld::check_actorsPos(int x, int y)
 {

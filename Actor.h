@@ -27,7 +27,6 @@ public:
 	Penelope(double startX, double startY, StudentWorld *this_world);
 	virtual void doSomething();
 	virtual bool isBlockActor() { return true; }
-
 private:
 };
 
@@ -36,7 +35,7 @@ class Wall : public Actor
 public:
 	Wall(double startX, double startYh, StudentWorld *this_world);
 	virtual void doSomething() {}
-	virtual bool isBlockActor() { return true; };
+	virtual bool isBlockActor() { return true; }
 private:
 };
 

@@ -14,6 +14,14 @@ Penelope::Penelope(double startX, double startY, StudentWorld *this_world)
 void Penelope::doSomething()
 {
 	int ch;
+	getWorld()->check_collision();
+	bool temp_collision_right = getWorld()->if_collision_onRight();
+	bool temp_collision_left = getWorld()->if_collision_onLeft();
+	bool temp_collision_up = getWorld()->if_collision_onUp();
+	bool temp_collision_down = getWorld()->if_collision_onDown();
+
+	//std::cout << temp_collision_up << std::endl;
+
 	if (getWorld()->getKey(ch))
 	{
 		switch (ch)
@@ -21,25 +29,25 @@ void Penelope::doSomething()
 		case KEY_PRESS_LEFT:
 			if (getDirection() != left)
 				setDirection(left);
-			else
+			else if(!temp_collision_left)
 				moveTo(getX() - 4, getY());
 			break;
 		case KEY_PRESS_RIGHT:
 			if (getDirection() != right)
 				setDirection(right);
-			else
+			else if (!temp_collision_right)
 				moveTo(getX() + 4, getY());
 			break;
 		case KEY_PRESS_UP:
 			if (getDirection() != up)
 				setDirection(up);
-			else
+			else if (!temp_collision_up)
 				moveTo(getX(), getY() + 4);
 			break;
 		case KEY_PRESS_DOWN:
 			if (getDirection() != down)
 				setDirection(down);
-			else
+			else if (!temp_collision_down)
 				moveTo(getX(), getY() - 4);
 			break;
 		}
