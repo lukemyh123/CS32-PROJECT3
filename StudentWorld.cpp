@@ -67,62 +67,23 @@ void StudentWorld::cleanUp()
 	}
 }
 
-void StudentWorld::check_collision(int next_x, int next_y)
+bool StudentWorld::check_collision(int next_x, int next_y)
 {
 	vector<Actor*>::iterator it;
-
-	set_left(false); set_right(false); set_up(false); set_down(false);
-
-	cout << "+++++++++++++++++++++++++++++++++++" << endl;
-	cout << "PLAY_X " << m_penelope->getX() << " ";
-	//cout << "PLAY_Y " << m_penelope->getY() << endl;
 	for (it = m_actors.begin(); it != m_actors.end();it++)
 	{		
-		if ((*it)->isBlockActor() == true)  //check whether the actors are bounder box
+		if ((*it)->isBlockActor() == true)  //check whether the actors are bounder boxs collision 
 		{    
-			if ((m_penelope->getX() + SPRITE_WIDTH-1) >= ((*it)->getX())
-				&& (m_penelope->getX()) <= ((*it)->getX() + SPRITE_WIDTH-1)
-				&& (m_penelope->getY() + SPRITE_HEIGHT-1) >= ((*it)->getY())
-				&& (m_penelope->getY()) <= ((*it)->getY() + SPRITE_HEIGHT-1))
-				{
-					cout << "true" << endl;
-					//cout << "PLAY_X " << m_penelope->getX() << " ";
-					//cout << "PLAY_Y " << m_penelope->getY() << endl;
-					cout << "Wall_X " << (*it)->getX() << " ";
-					cout << "Wall_Y " << (*it)->getY() << endl;
-					
-
-					if (m_penelope->getX()+4 == (*it)->getX() + SPRITE_WIDTH)  //the blocking is on the left
-					{
-						cout << "Left" << endl;
-						set_left(true); //set_right(false); set_up(false); set_down(false);
-					}
-					if (m_penelope->getX() + SPRITE_WIDTH-4 == (*it)->getX())  //the blocking is on the right
-					{
-						cout << "right" << endl;
-						//set_left(false); set_right(true); set_up(false); set_down(false);
-						set_right(true);
-					}
-					
-					if (m_penelope->getY() + 4 == (*it)->getY() + SPRITE_HEIGHT)   //the blocking is on the down
-					{
-						cout << "down" << endl;
-						//set_left(false); set_right(false); set_up(false); set_down(true);
-						set_down(true);
-					}
-					
-					if (m_penelope->getY() + SPRITE_HEIGHT - 4 == (*it)->getY())  //the blocking is on the up
-					{
-						cout << "up" << endl;
-						//set_left(false); set_right(false); set_up(true); set_down(false);
-						set_up(true);
-					}
-					
-				}
-			//else
-				//set_left(false); set_right(false); set_up(false); set_down(false);  //no blockings arround*/
+			if ((next_x + SPRITE_WIDTH-1) >= ((*it)->getX())
+				&& (next_x) <= ((*it)->getX() + SPRITE_WIDTH-1)
+				&& (next_y + SPRITE_HEIGHT-1) >= ((*it)->getY())
+				&& (next_y) <= ((*it)->getY() + SPRITE_HEIGHT-1))
+			{
+				return true;
+			}
 		}
 	}
+	return false;
 }
 
 std::string StudentWorld::check_actorsPos(int x, int y)

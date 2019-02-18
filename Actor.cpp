@@ -14,12 +14,6 @@ Penelope::Penelope(double startX, double startY, StudentWorld *this_world)
 void Penelope::doSomething()
 {
 	int ch;
-	getWorld()->check_collision();
-	bool temp_collision_right = getWorld()->if_collision_onRight();
-	bool temp_collision_left = getWorld()->if_collision_onLeft();
-	bool temp_collision_up = getWorld()->if_collision_onUp();
-	bool temp_collision_down = getWorld()->if_collision_onDown();
-
 	//std::cout << temp_collision_up << std::endl;
 
 	if (getWorld()->getKey(ch))
@@ -29,25 +23,25 @@ void Penelope::doSomething()
 		case KEY_PRESS_LEFT:
 			if (getDirection() != left)
 				setDirection(left);
-			else if(!temp_collision_left)
+			else if(!getWorld()->check_collision(getX() - 4, getY())) //check if the next left has blocking
 				moveTo(getX() - 4, getY());
 			break;
 		case KEY_PRESS_RIGHT:
 			if (getDirection() != right)
 				setDirection(right);
-			else if (!temp_collision_right)
+			else if(!getWorld()->check_collision(getX() + 4, getY())) //check if the next right has blocking
 				moveTo(getX() + 4, getY());
 			break;
 		case KEY_PRESS_UP:
 			if (getDirection() != up)
 				setDirection(up);
-			else if (!temp_collision_up)
-				moveTo(getX(), getY() + 4);
+			else if(!getWorld()->check_collision(getX(), getY() + 4))  //check if the next up has blocking
+				moveTo(getX(), getY() + 4);		
 			break;
 		case KEY_PRESS_DOWN:
 			if (getDirection() != down)
 				setDirection(down);
-			else if (!temp_collision_down)
+			else if(!getWorld()->check_collision(getX(), getY() - 4))  //check if the down has blocking
 				moveTo(getX(), getY() - 4);
 			break;
 		}
