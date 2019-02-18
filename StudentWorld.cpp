@@ -17,13 +17,13 @@ StudentWorld::StudentWorld(string assetPath)
 
 StudentWorld::~StudentWorld()
 {
-	//cleanUp();
+	cleanUp();
 }
 
 int StudentWorld::init()
 {
 	//advanceToNextLevel();
-	//int level = getLevel();
+	cout << getLevel() << endl;
 	for (int x = 0; x < SPRITE_WIDTH; x++)
 	{
 		for (int y = 0; y < SPRITE_HEIGHT; y++)
@@ -35,6 +35,8 @@ int StudentWorld::init()
 				m_penelope = new Penelope(SPRITE_WIDTH * x, SPRITE_HEIGHT * y, this);
 			else if (name_actor == "exit")
 				m_actors.push_back(new Exit(SPRITE_WIDTH * x, SPRITE_HEIGHT * y, this));
+			else if (name_actor == "pit")
+				m_actors.push_back(new Pit(SPRITE_WIDTH * x, SPRITE_HEIGHT * y, this));
 		}	
 	}
 
@@ -46,6 +48,7 @@ int StudentWorld::move()
     // This code is here merely to allow the game to build, run, and terminate after you hit enter.
     // Notice that the return value GWSTATUS_PLAYER_DIED will cause our framework to end the current level.
     //decLives();
+
 	setGame_info();
 	m_penelope->doSomething();
 	vector<Actor*>::iterator it;  //delete all actors
@@ -54,27 +57,30 @@ int StudentWorld::move()
 		(*it)->doSomething();
 	}
 
-	if (getLevel() == 2)
-		return GWSTATUS_FINISHED_LEVEL;
+	if (getLives() == 0)
+		return GWSTATUS_PLAYER_DIED;
 	
     return GWSTATUS_CONTINUE_GAME;
 }
 
 void StudentWorld::cleanUp()
 {
-	//if(m_penelope != nullptr)
+	if(m_penelope != nullptr)
 		delete m_penelope;  //delete player
 	vector<Actor*>::iterator it;  //delete all actors
-	//if (m_actors.size() != 0)
-	//{
-		for (it = m_actors.begin(); it != m_actors.end();)
+
+	for (it = m_actors.begin(); it != m_actors.end();)
+	{
+		if ((*it) != nullptr)
 		{
 			delete *it;
 			it = m_actors.erase(it);
-			it++;
 		}
-	//}
+		else
+			it++;
+	}
 }
+
 
 bool StudentWorld::check_collision(double next_x, double next_y)
 {
@@ -107,6 +113,18 @@ bool StudentWorld::overlapWithExit(double exit_x, double exit_y)    //check if a
 	return false;
 }
 
+bool StudentWorld::overlapWithPit(double pit_x, double pit_y)   //check if any actors are overlap with Pit
+{
+	vector<Actor*>::iterator it;
+	double player_x = m_penelope->getX();
+	double player_y = m_penelope->getY();
+
+	if (pow(player_x - pit_x, 2) + pow(player_y - pit_y, 2) <= 100)  //overlap(x1-x2)^2 + (y1-y2)^2 ≤ 10^2
+		return true;
+
+	return false;
+}
+
 void StudentWorld::setGame_info()
 {
 	ostringstream print_info;
@@ -121,12 +139,7 @@ void StudentWorld::setGame_info()
 std::string StudentWorld::check_actorsPos(int x, int y)
 {
 	Level lev(assetPath());
-	string levelFile;
-	if(getLevel() == 1)
-		levelFile = "level01.txt";  //getLevel()
-	if(getLevel() == 2)
-		levelFile = "level02.txt";  //getLevel()
-
+	string levelFile = "level04.txt";
 	Level::LoadResult result = lev.loadLevel(levelFile);
 	if (result == Level::load_fail_file_not_found)
 		cerr << "Cannot find level01.txt data file" << endl;

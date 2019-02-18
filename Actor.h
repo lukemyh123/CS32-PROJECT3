@@ -47,6 +47,14 @@ public:
 	virtual bool isBlockActor() { return false; }
 };
 
+class Pit : public Actor
+{
+public:
+	Pit(double startX, double startYh, StudentWorld *this_world);
+	virtual void doSomething();
+	virtual bool isBlockActor() { return false; }
+};
+
 
 
 #endif // ACTOR_H_

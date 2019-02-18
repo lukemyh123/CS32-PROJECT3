@@ -56,7 +56,15 @@ Exit::Exit(double startX, double startY, StudentWorld *this_world)
 
 void Exit::doSomething()
 {
-	if (getWorld()->overlapWithExit(getX(), getY()) == true)
-		getWorld()->advanceToNextLevel();
+	//if (getWorld()->overlapWithExit(getX(), getY()) == true)
+		//getWorld()->advanceToNextLevel();
+}
 
+Pit::Pit(double startX, double startY, StudentWorld *this_world)
+	: Actor(IID_PIT, startX, startY, right, 0, this_world) {}
+
+void Pit::doSomething()
+{
+	if (getWorld()->overlapWithPit(getX(), getY()) == true)
+		getWorld()->decLives();
 }

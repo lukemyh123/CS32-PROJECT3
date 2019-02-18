@@ -20,6 +20,8 @@ public:
 
 	bool check_collision(double next_x, double next_y);
 	bool overlapWithExit(double exit_x, double exit_y);
+	bool overlapWithPit(double pit_x, double pit_y);
+
 	void setGame_info();
 
 
