@@ -1,7 +1,8 @@
 #include "StudentWorld.h"
 #include "GameConstants.h"
-
+#include <sstream>   //ostringstream
 #include <string>
+#include <iomanip>  //setw()
 using namespace std;
 
 GameWorld* createStudentWorld(string assetPath)
@@ -23,23 +24,17 @@ int StudentWorld::init()
 {
 	//advanceToNextLevel();
 	//int level = getLevel();
-
-	/*m_actors.push_back(new Wall(SPRITE_WIDTH * 5, SPRITE_HEIGHT * 1, this));
-	m_actors.push_back(new Wall(SPRITE_WIDTH * 1, SPRITE_HEIGHT * 1, this));
-	m_actors.push_back(new Wall(SPRITE_WIDTH * 4, SPRITE_HEIGHT * 6, this));
-	m_actors.push_back(new Wall(SPRITE_WIDTH * 5, SPRITE_HEIGHT * 6, this));
-
-	m_penelope = new Penelope(SPRITE_WIDTH * 3, SPRITE_HEIGHT * 4, this);*/
-
 	for (int x = 0; x < SPRITE_WIDTH; x++)
 	{
 		for (int y = 0; y < SPRITE_HEIGHT; y++)
 		{
 			string name_actor = check_actorsPos(x, y);
-			if(name_actor == "wall")
+			if (name_actor == "wall")
 				m_actors.push_back(new Wall(SPRITE_WIDTH * x, SPRITE_HEIGHT * y, this));
-			else if(name_actor == "player")
+			else if (name_actor == "player")
 				m_penelope = new Penelope(SPRITE_WIDTH * x, SPRITE_HEIGHT * y, this);
+			else if (name_actor == "exit")
+				m_actors.push_back(new Exit(SPRITE_WIDTH * x, SPRITE_HEIGHT * y, this));
 		}	
 	}
 
@@ -51,19 +46,24 @@ int StudentWorld::move()
     // This code is here merely to allow the game to build, run, and terminate after you hit enter.
     // Notice that the return value GWSTATUS_PLAYER_DIED will cause our framework to end the current level.
     //decLives();
+	setGame_info();
 	m_penelope->doSomething();
     return GWSTATUS_CONTINUE_GAME;
 }
 
 void StudentWorld::cleanUp()
 {
-	delete m_penelope;  //delete player
+	if(m_penelope != nullptr)
+		delete m_penelope;  //delete player
 	vector<Actor*>::iterator it;  //delete all actors
-	for (it = m_actors.begin(); it != m_actors.end();)
+	if (m_actors.size() != 0)
 	{
-		delete *it;
-		it = m_actors.erase(it);
-		it++;
+		for (it = m_actors.begin(); it != m_actors.end();)
+		{
+			delete *it;
+			it = m_actors.erase(it);
+			it++;
+		}
 	}
 }
 
@@ -86,10 +86,30 @@ bool StudentWorld::check_collision(int next_x, int next_y)
 	return false;
 }
 
+/*bool StudentWorld::overlapWithExit(Actor* a_actor)    //check if any actors are overlap with Exit
+{
+	vector<Actor*>::iterator it;
+	for (it = m_actors.begin(); it != m_actors.end(); it++)
+	{
+		if((*it)->)
+	}
+}*/
+
+void StudentWorld::setGame_info()
+{
+	ostringstream print_info;
+	print_info.setf(ios::fixed);
+
+	//Score:	004500		Level:	27		Lives:	3		Vaccines:	2		Flames:	16		Mines:	1		Infected:	0
+	print_info <<"Score: " << setw(2) << getScore()<< "  Level: " <<setw(2) << getLevel() << "  Lives: " << setw(2) << getLives()
+		<< "  Vaccines: " << setw(2) << 0 << "  Flames; " << setw(2) << 0 <<"  Mines: " << setw(2) << 0 << "  Infected: " << setw(2) << 0;
+	setGameStatText(print_info.str());
+}
+
 std::string StudentWorld::check_actorsPos(int x, int y)
 {
 	Level lev(assetPath());
-	string levelFile = "level01.txt";  //getLevel()
+	string levelFile = "level02.txt";  //getLevel()
 	Level::LoadResult result = lev.loadLevel(levelFile);
 	if (result == Level::load_fail_file_not_found)
 		cerr << "Cannot find level01.txt data file" << endl;

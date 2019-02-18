@@ -50,3 +50,11 @@ void Penelope::doSomething()
 
 Wall::Wall(double startX, double startY, StudentWorld *this_world)
 		: Actor(IID_WALL, startX, startY, right, 0, this_world){}
+
+Exit::Exit(double startX, double startY, StudentWorld *this_world)
+	: Actor(IID_EXIT, startX, startY, right, 1, this_world){}
+
+void Exit::doSomething()
+{
+
+}

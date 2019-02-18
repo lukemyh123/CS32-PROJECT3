@@ -19,6 +19,9 @@ public:
     virtual void cleanUp();
 
 	bool check_collision(int next_x, int next_y);
+	bool overlapWithExit(Actor* a_actor) { return false; }
+	void setGame_info();
+
 
 	std::string check_actorsPos(int x, int y);
 private:

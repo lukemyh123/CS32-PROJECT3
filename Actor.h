@@ -39,5 +39,14 @@ public:
 private:
 };
 
+class Exit : public Actor
+{
+public:
+	Exit(double startX, double startYh, StudentWorld *this_world);
+	virtual void doSomething();
+	virtual bool isBlockActor() { return false; }
+};
+
+
 
 #endif // ACTOR_H_
