@@ -56,9 +56,12 @@ int StudentWorld::move()
 	{
 		(*it)->doSomething();
 	}
+	
+	//if (getLevel() == 2)
+		//return GWSTATUS_FINISHED_LEVEL;
 
-	if (getLives() == 0)
-		return GWSTATUS_PLAYER_DIED;
+	if (moveToNextLevel())
+		return GWSTATUS_FINISHED_LEVEL;
 	
     return GWSTATUS_CONTINUE_GAME;
 }
@@ -101,15 +104,24 @@ bool StudentWorld::check_collision(double next_x, double next_y)
 	return false;
 }
 
-bool StudentWorld::overlapWithExit(double exit_x, double exit_y)    //check if any actors are overlap with Exit
+bool StudentWorld::Player_overlapWithExit(double exit_x, double exit_y)    //check if player is overlap with Exit
 {
 	vector<Actor*>::iterator it;
 	double player_x = m_penelope->getX();
 	double player_y = m_penelope->getY(); 
 	
 	if (pow(player_x - exit_x, 2) + pow(player_y - exit_y, 2) <= 100)  //overlap(x1-x2)^2 + (y1-y2)^2 ≤ 10^2
+	{
+		go_next_level = true;
 		return true;
+	}
+	go_next_level = false;
+	return false;
+}
 
+bool StudentWorld::citizen_overlapWithExit(double exit_x, double exit_y)
+{
+	vector<Actor*>::iterator it;
 	return false;
 }
 
@@ -127,19 +139,22 @@ bool StudentWorld::overlapWithPit(double pit_x, double pit_y)   //check if any a
 
 void StudentWorld::setGame_info()
 {
-	ostringstream print_info;
-	print_info.setf(ios::fixed);
+	ostringstream oss;
+	oss.setf(ios::fixed);
 
 	//Score:	004500		Level:	27		Lives:	3		Vaccines:	2		Flames:	16		Mines:	1		Infected:	0
-	print_info <<"Score: " << setw(2) << getScore()<< "  Level: " <<setw(2) << getLevel() << "  Lives: " << setw(2) << getLives()
+	oss <<"Score: " << setw(2) << getScore()<< "  Level: " <<setw(2) << getLevel() << "  Lives: " << setw(2) << getLives()
 		<< "  Vaccines: " << setw(2) << 0 << "  Flames; " << setw(2) << 0 <<"  Mines: " << setw(2) << 0 << "  Infected: " << setw(2) << 0;
-	setGameStatText(print_info.str());
+	setGameStatText(oss.str());
 }
 
 std::string StudentWorld::check_actorsPos(int x, int y)
 {
 	Level lev(assetPath());
-	string levelFile = "level04.txt";
+	ostringstream oss;
+	oss << "level0" << getLevel() << ".txt";
+	//oss << "level0" << 4 << ".txt";
+	string levelFile = oss.str();
 	Level::LoadResult result = lev.loadLevel(levelFile);
 	if (result == Level::load_fail_file_not_found)
 		cerr << "Cannot find level01.txt data file" << endl;
