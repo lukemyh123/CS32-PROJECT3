@@ -56,7 +56,7 @@ Exit::Exit(double startX, double startY, StudentWorld *this_world)
 
 void Exit::doSomething()
 {
-	bool temp = getWorld()->Player_overlapWithExit(getX(), getY());   //If the player is overlap with Exit and no more citizen, goes to next level
+	getWorld()->Player_overlapWithExit(getX(), getY());   //If the player is overlap with Exit and no more citizen, goes to next level
 
 	if (getWorld()->citizen_overlapWithExit(getX(), getY()) == true)  //If the citizen are overlap with Eixt, destory them ,and add score
 		std::cout << "Delete citizen" << std::endl;
@@ -68,6 +68,16 @@ Pit::Pit(double startX, double startY, StudentWorld *this_world)
 
 void Pit::doSomething()
 {
-	if (getWorld()->overlapWithPit(getX(), getY()) == true)       //if the plaer is overlap with Pit, decLives();
-		getWorld()->decLives();
+	getWorld()->overlapWithPit(getX(), getY());      //if any actors are overlap with Pit, decLives();
+}
+
+Flame::Flame(double startX, double startY, StudentWorld *this_world)
+	: Actor(IID_FLAME, startX, startY, right, 0, this_world) 
+{
+	setAlive();
+}
+
+void Flame::doSomething()
+{
+
 }

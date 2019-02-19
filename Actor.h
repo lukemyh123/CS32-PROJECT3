@@ -13,11 +13,13 @@ public:
 	virtual void doSomething() = 0;
 	bool isDead() { return object_dead; }
 	virtual void setDead() { object_dead = true; }
+	virtual void setAlive() { object_alive = true; }
 	StudentWorld * getWorld() { return s_world; }
 	virtual bool isBlockActor() = 0;
 	~Actor();
 private:
 	bool object_dead = false;
+	bool object_alive = false;
 	StudentWorld* s_world;
 };
 
@@ -51,6 +53,14 @@ class Pit : public Actor
 {
 public:
 	Pit(double startX, double startYh, StudentWorld *this_world);
+	virtual void doSomething();
+	virtual bool isBlockActor() { return false; }
+};
+
+class Flame : public Actor
+{
+public:
+	Flame(double startX, double startYh, StudentWorld *this_world);
 	virtual void doSomething();
 	virtual bool isBlockActor() { return false; }
 };

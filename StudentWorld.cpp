@@ -23,7 +23,7 @@ StudentWorld::~StudentWorld()
 int StudentWorld::init()
 {
 	//advanceToNextLevel();
-	cout << getLevel() << endl;
+	penelope_dead = false;  //reset Player status
 	for (int x = 0; x < SPRITE_WIDTH; x++)
 	{
 		for (int y = 0; y < SPRITE_HEIGHT; y++)
@@ -56,12 +56,13 @@ int StudentWorld::move()
 	{
 		(*it)->doSomething();
 	}
-	
-	//if (getLevel() == 2)
-		//return GWSTATUS_FINISHED_LEVEL;
 
 	if (moveToNextLevel())
 		return GWSTATUS_FINISHED_LEVEL;
+
+	//cout << Player_dead() << endl;
+	if (Player_dead())
+		return GWSTATUS_PLAYER_DIED;
 	
     return GWSTATUS_CONTINUE_GAME;
 }
@@ -70,8 +71,8 @@ void StudentWorld::cleanUp()
 {
 	if(m_penelope != nullptr)
 		delete m_penelope;  //delete player
-	vector<Actor*>::iterator it;  //delete all actors
 
+	vector<Actor*>::iterator it;  //delete all actors
 	for (it = m_actors.begin(); it != m_actors.end();)
 	{
 		if ((*it) != nullptr)
@@ -104,7 +105,7 @@ bool StudentWorld::check_collision(double next_x, double next_y)
 	return false;
 }
 
-bool StudentWorld::Player_overlapWithExit(double exit_x, double exit_y)    //check if player is overlap with Exit
+void StudentWorld::Player_overlapWithExit(double exit_x, double exit_y)    //check if player is overlap with Exit
 {
 	vector<Actor*>::iterator it;
 	double player_x = m_penelope->getX();
@@ -113,10 +114,9 @@ bool StudentWorld::Player_overlapWithExit(double exit_x, double exit_y)    //che
 	if (pow(player_x - exit_x, 2) + pow(player_y - exit_y, 2) <= 100)  //overlap(x1-x2)^2 + (y1-y2)^2 ≤ 10^2
 	{
 		go_next_level = true;
-		return true;
 	}
-	go_next_level = false;
-	return false;
+	else
+		go_next_level = false;
 }
 
 bool StudentWorld::citizen_overlapWithExit(double exit_x, double exit_y)
@@ -125,16 +125,19 @@ bool StudentWorld::citizen_overlapWithExit(double exit_x, double exit_y)
 	return false;
 }
 
-bool StudentWorld::overlapWithPit(double pit_x, double pit_y)   //check if any actors are overlap with Pit
+void StudentWorld::overlapWithPit(double pit_x, double pit_y)   
 {
-	vector<Actor*>::iterator it;
-	double player_x = m_penelope->getX();
+	double player_x = m_penelope->getX();   //check if player are overlap with Pit
 	double player_y = m_penelope->getY();
 
 	if (pow(player_x - pit_x, 2) + pow(player_y - pit_y, 2) <= 100)  //overlap(x1-x2)^2 + (y1-y2)^2 ≤ 10^2
-		return true;
-
-	return false;
+	{
+		decLives();
+		penelope_dead = true;
+		return;
+	}
+	
+	vector<Actor*>::iterator it;  //check any actors are overlap with Pit
 }
 
 void StudentWorld::setGame_info()
