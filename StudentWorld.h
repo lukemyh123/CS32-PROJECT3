@@ -23,7 +23,7 @@ public:
 	bool moveToNextLevel() { return go_next_level; }
 	bool Player_dead() { return penelope_dead; }
 	bool citizen_overlapWithExit(double exit_x, double exit_y);
-
+	bool Player_overlapWithVaccine(double vaccine_x, double vaccine_y);
 	void overlapWithPit(double pit_x, double pit_y);
 
 	void setGame_info();

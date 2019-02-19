@@ -74,10 +74,35 @@ void Pit::doSomething()
 Flame::Flame(double startX, double startY, StudentWorld *this_world)
 	: Actor(IID_FLAME, startX, startY, right, 0, this_world) 
 {
+	setDead();
+}
+void Flame::doSomething(){}
+
+Goodie::Goodie(int image_ID, double startX, double startY, StudentWorld *this_world)
+	: Actor(image_ID, startX, startY, right, 1, this_world)
+{
 	setAlive();
 }
+void Goodie::doSomething()
+{
+	if (getWorld()->Player_overlapWithVaccine(getX(), getY()))
+		setDead();
 
-void Flame::doSomething()
+	if (getStatus() == false)
+		return;
+}
+
+Vaccine_goodie::Vaccine_goodie(double startX, double startY, StudentWorld *this_world)
+	: Goodie(IID_VACCINE_GOODIE, startX, startY, this_world){}
+
+Gas_can_goodie::Gas_can_goodie(double startX, double startY, StudentWorld *this_world)
+	: Goodie(IID_GAS_CAN_GOODIE, startX, startY, this_world) {}
+
+Landmine_goodie::Landmine_goodie(double startX, double startY, StudentWorld *this_world)
+	: Goodie(IID_LANDMINE_GOODIE, startX, startY, this_world) {}
+
+/*Gas_can_goodie::Gas_can_goodie(double startX, double startY, StudentWorld *this_world)
+	: Vaccine_goodie(IID_GAS_CAN_GOODIE, startX, startY, right, 1, this_world)
 {
 
-}
+}*/

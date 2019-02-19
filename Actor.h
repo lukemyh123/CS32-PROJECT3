@@ -11,15 +11,14 @@ class Actor : public GraphObject
 public:
 	Actor(int imageID, double startX, double startY, Direction dir, int depth, StudentWorld *this_world);
 	virtual void doSomething() = 0;
-	bool isDead() { return object_dead; }
-	virtual void setDead() { object_dead = true; }
+	bool getStatus() { return object_alive; }
+	virtual void setDead() { object_alive = false; }
 	virtual void setAlive() { object_alive = true; }
 	StudentWorld * getWorld() { return s_world; }
 	virtual bool isBlockActor() = 0;
 	~Actor();
 private:
-	bool object_dead = false;
-	bool object_alive = false;
+	bool object_alive = true;
 	StudentWorld* s_world;
 };
 
@@ -35,7 +34,7 @@ private:
 class Wall : public Actor
 {
 public:
-	Wall(double startX, double startYh, StudentWorld *this_world);
+	Wall(double startX, double startY, StudentWorld *this_world);
 	virtual void doSomething() {}
 	virtual bool isBlockActor() { return true; }
 private:
@@ -44,7 +43,7 @@ private:
 class Exit : public Actor
 {
 public:
-	Exit(double startX, double startYh, StudentWorld *this_world);
+	Exit(double startX, double startY, StudentWorld *this_world);
 	virtual void doSomething();
 	virtual bool isBlockActor() { return false; }
 };
@@ -52,7 +51,7 @@ public:
 class Pit : public Actor
 {
 public:
-	Pit(double startX, double startYh, StudentWorld *this_world);
+	Pit(double startX, double startY, StudentWorld *this_world);
 	virtual void doSomething();
 	virtual bool isBlockActor() { return false; }
 };
@@ -60,11 +59,36 @@ public:
 class Flame : public Actor
 {
 public:
-	Flame(double startX, double startYh, StudentWorld *this_world);
+	Flame(double startX, double startY, StudentWorld *this_world);
 	virtual void doSomething();
 	virtual bool isBlockActor() { return false; }
 };
 
+class Goodie : public Actor
+{
+public:
+	Goodie(int image_ID, double startX, double startY, StudentWorld *this_world);
+	virtual void doSomething();
+	virtual bool isBlockActor() { return false; }
+};
 
+class Vaccine_goodie : public Goodie
+{
+public:
+	Vaccine_goodie(double startX, double startY, StudentWorld *this_world);
+};
+
+class Gas_can_goodie : public Goodie
+{
+public:
+	Gas_can_goodie(double startX, double startY, StudentWorld *this_world);
+};
+
+class Landmine_goodie : public Goodie
+{
+public:
+	Landmine_goodie(double startX, double startYh, StudentWorld *this_world);
+
+};
 
 #endif // ACTOR_H_

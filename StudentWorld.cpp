@@ -24,6 +24,7 @@ int StudentWorld::init()
 {
 	//advanceToNextLevel();
 	penelope_dead = false;  //reset Player status
+	go_next_level = false; //reset the player can go to next level by exit
 	for (int x = 0; x < SPRITE_WIDTH; x++)
 	{
 		for (int y = 0; y < SPRITE_HEIGHT; y++)
@@ -37,6 +38,13 @@ int StudentWorld::init()
 				m_actors.push_back(new Exit(SPRITE_WIDTH * x, SPRITE_HEIGHT * y, this));
 			else if (name_actor == "pit")
 				m_actors.push_back(new Pit(SPRITE_WIDTH * x, SPRITE_HEIGHT * y, this));
+			else if (name_actor == "vaccine_goodie")
+				m_actors.push_back(new Vaccine_goodie(SPRITE_WIDTH * x, SPRITE_HEIGHT * y, this));
+			else if (name_actor == "gas_can_goodie")
+				m_actors.push_back(new Gas_can_goodie(SPRITE_WIDTH * x, SPRITE_HEIGHT * y, this));
+			else if (name_actor == "landmine_goodie")
+				m_actors.push_back(new Landmine_goodie(SPRITE_WIDTH * x, SPRITE_HEIGHT * y, this));
+			
 		}	
 	}
 
@@ -54,7 +62,13 @@ int StudentWorld::move()
 	vector<Actor*>::iterator it;  //delete all actors
 	for (it = m_actors.begin(); it != m_actors.end(); it++)
 	{
-		(*it)->doSomething();
+		if((*it)->getStatus() == true)
+			(*it)->doSomething();
+		if ((*it)->getStatus() == false)
+		{	
+			delete *it;
+			it = m_actors.erase(it);
+		}
 	}
 
 	if (moveToNextLevel())
@@ -69,8 +83,7 @@ int StudentWorld::move()
 
 void StudentWorld::cleanUp()
 {
-	if(m_penelope != nullptr)
-		delete m_penelope;  //delete player
+	delete m_penelope;  //delete player
 
 	vector<Actor*>::iterator it;  //delete all actors
 	for (it = m_actors.begin(); it != m_actors.end();)
@@ -82,6 +95,7 @@ void StudentWorld::cleanUp()
 		}
 		else
 			it++;
+
 	}
 }
 
@@ -114,15 +128,26 @@ void StudentWorld::Player_overlapWithExit(double exit_x, double exit_y)    //che
 	if (pow(player_x - exit_x, 2) + pow(player_y - exit_y, 2) <= 100)  //overlap(x1-x2)^2 + (y1-y2)^2 ≤ 10^2
 	{
 		go_next_level = true;
+		return;
 	}
-	else
-		go_next_level = false;
 }
 
 bool StudentWorld::citizen_overlapWithExit(double exit_x, double exit_y)
 {
 	vector<Actor*>::iterator it;
 	return false;
+}
+
+bool StudentWorld::Player_overlapWithVaccine(double vaccine_x, double vaccine_y)
+{
+	double player_x = m_penelope->getX();   //check if player are overlap with vaccine
+	double player_y = m_penelope->getY();
+
+	if (pow(player_x - vaccine_x, 2) + pow(player_y - vaccine_y, 2) <= 100)  //overlap(x1-x2)^2 + (y1-y2)^2 ≤ 10^2
+		return true;
+
+	return false;
+
 }
 
 void StudentWorld::overlapWithPit(double pit_x, double pit_y)   
@@ -156,7 +181,7 @@ std::string StudentWorld::check_actorsPos(int x, int y)
 	Level lev(assetPath());
 	ostringstream oss;
 	oss << "level0" << getLevel() << ".txt";
-	//oss << "level0" << 4 << ".txt";
+	//oss << "level0" << 3 << ".txt";
 	string levelFile = oss.str();
 	Level::LoadResult result = lev.loadLevel(levelFile);
 	if (result == Level::load_fail_file_not_found)
@@ -189,6 +214,15 @@ std::string StudentWorld::check_actorsPos(int x, int y)
 			break;
 		case Level::pit:
 			return "pit";
+			break;
+		case Level::vaccine_goodie:
+			return "vaccine_goodie";
+			break;
+		case Level::gas_can_goodie:
+			return "gas_can_goodie";
+			break;
+		case Level::landmine_goodie:
+			return "landmine_goodie";
 			break;
 		}
 	}
