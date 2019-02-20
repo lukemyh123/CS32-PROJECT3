@@ -73,14 +73,19 @@ class Goodie : public Actor
 {
 public:
     Goodie(int image_ID, double startX, double startY, StudentWorld *this_world);
-    virtual void doSomething();
+    void doSomething();
+    //virtual void setGoodie(int i){m_goodies = i;}
+    //virtual int get_Goodie(){return m_goodies;}
     virtual bool isBlockActor() { return false; }
+private:
+    //int m_goodies;
 };
 
 class Vaccine_goodie : public Goodie
 {
 public:
     Vaccine_goodie(double startX, double startY, StudentWorld *this_world);
+private:
 };
 
 class Gas_can_goodie : public Goodie

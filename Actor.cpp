@@ -144,7 +144,3 @@ Gas_can_goodie::Gas_can_goodie(double startX, double startY, StudentWorld *this_
 Landmine_goodie::Landmine_goodie(double startX, double startY, StudentWorld *this_world)
 : Goodie(IID_LANDMINE_GOODIE, startX, startY, this_world) {}
 
-/*Gas_can_goodie::Gas_can_goodie(double startX, double startY, StudentWorld *this_world)
- : Vaccine_goodie(IID_GAS_CAN_GOODIE, startX, startY, right, 1, this_world)
- {
- }*/

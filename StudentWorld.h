@@ -22,6 +22,7 @@ public:
     void Player_overlapWithExit(double exit_x, double exit_y);
     bool moveToNextLevel() { return go_next_level; }
     bool citizen_overlapWithExit(double exit_x, double exit_y);
+    
     bool Player_overlapWithGoodies(double goodies_x, double goodies_y);
 
     void overlapWithPit(double pit_x, double pit_y);
