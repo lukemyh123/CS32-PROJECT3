@@ -11,18 +11,18 @@ class Actor : public GraphObject
 public:
     Actor(int imageID, double startX, double startY, Direction dir, int depth, StudentWorld *this_world);
     virtual void doSomething() = 0;
-     bool getStatus() { return object_alive; }
+    bool getStatus() { return object_alive; }
     virtual void setDead() { object_alive = false; }
     virtual void setAlive() { object_alive = true; }
-    int whoIam (){return iamWhat;}
-    void setWhoIam(int i){iamWhat = i;}
+    int whoamI (){return iamWho;}
+    void setWhoIam(int i){iamWho = i;}
     StudentWorld * getWorld() { return s_world; }
     virtual bool isBlockActor() = 0;
     ~Actor();
 private:
     bool object_alive = true;
     StudentWorld* s_world;
-    int iamWhat = 0;
+    int iamWho = 0;
 };
 
 class Penelope : public Actor
@@ -66,7 +66,7 @@ public:
     virtual void doSomething();
     virtual bool isBlockActor() { return false; }
 private:
-     int tick = 0;
+    int tick = 0;
 };
 
 class Goodie : public Actor
@@ -74,11 +74,11 @@ class Goodie : public Actor
 public:
     Goodie(int image_ID, double startX, double startY, StudentWorld *this_world);
     void doSomething();
-    //virtual void setGoodie(int i){m_goodies = i;}
-    //virtual int get_Goodie(){return m_goodies;}
+    virtual void setGoodie(int i){m_goodies = i;}
+    virtual int get_Goodie(){return m_goodies;}
     virtual bool isBlockActor() { return false; }
 private:
-    //int m_goodies;
+    int m_goodies;
 };
 
 class Vaccine_goodie : public Goodie

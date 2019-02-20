@@ -50,24 +50,28 @@ void Penelope::doSomething()
                     moveTo(getX(), getY() - 4);
                 break;
             case KEY_PRESS_SPACE:
-                if (getDirection() == left  /*&&if player has gas*/)
+                if (getDirection() == left && getWorld()->get_flamethrower() != 0)
                 {
                     getWorld()->fire(getX(), getY(), 1);
+                    getWorld()->reduce_flamethrower();
                     //std::cout <<" Fire " << std::endl;  //produce fire;
                 }
-                else if (getDirection() == right  /*&&if player has gas*/)
+                else if (getDirection() == right && getWorld()->get_flamethrower() != 0)
                 {
                     getWorld()->fire(getX(), getY(), 2);
+                    getWorld()->reduce_flamethrower();
                     //std::cout <<" Fire " << std::endl;  //produce fire;
                 }
-                else if (getDirection() == up  /*&&if player has gas*/)
+                else if (getDirection() == up  && getWorld()->get_flamethrower() != 0)
                 {
                     getWorld()->fire(getX(), getY(), 3);
+                    getWorld()->reduce_flamethrower();
                     //std::cout <<" Fire " << std::endl;  //produce fire;
                 }
-                else if (getDirection() == down  /*&&if player has gas*/)
+                else if (getDirection() == down  && getWorld()->get_flamethrower() != 0)
                 {
                     getWorld()->fire(getX(), getY(), 4);
+                    getWorld()->reduce_flamethrower();
                     //std::cout <<" Fire " << std::endl;  //produce fire;
                 }
                 break;
@@ -136,11 +140,19 @@ void Goodie::doSomething()
 }
 
 Vaccine_goodie::Vaccine_goodie(double startX, double startY, StudentWorld *this_world)
-: Goodie(IID_VACCINE_GOODIE, startX, startY, this_world){}
+: Goodie(IID_VACCINE_GOODIE, startX, startY, this_world)
+{
+    setGoodie(1);  //1 for vaccine
+}
 
 Gas_can_goodie::Gas_can_goodie(double startX, double startY, StudentWorld *this_world)
-: Goodie(IID_GAS_CAN_GOODIE, startX, startY, this_world) {}
+: Goodie(IID_GAS_CAN_GOODIE, startX, startY, this_world)
+{
+    setGoodie(2);  //2 for gas can
+}
 
 Landmine_goodie::Landmine_goodie(double startX, double startY, StudentWorld *this_world)
-: Goodie(IID_LANDMINE_GOODIE, startX, startY, this_world) {}
-
+: Goodie(IID_LANDMINE_GOODIE, startX, startY, this_world)
+{
+    setGoodie(3);  //2 for Landmine
+}

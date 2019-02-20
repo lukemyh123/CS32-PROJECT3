@@ -68,11 +68,11 @@ int StudentWorld::move()
         {
             delete *it;
             it = m_actors.erase(it);
-           // it = m_actors.begin();
+            // it = m_actors.begin();
         }
         else
             it++;
-
+        
     }
     
     if (moveToNextLevel())
@@ -93,14 +93,14 @@ void StudentWorld::cleanUp()
     vector<Actor*>::iterator it;  //delete all actors
     for (it = m_actors.begin(); it != m_actors.end();)
     {
-       // if ((*it) != nullptr)
+        // if ((*it) != nullptr)
         //{
-            delete *it;
-            it = m_actors.erase(it);
-           // it = m_actors.begin();
+        delete *it;
+        it = m_actors.erase(it);
+        // it = m_actors.begin();
         //}
         //else
-          //  it++;
+        //  it++;
     }
 }
 
@@ -145,16 +145,29 @@ bool StudentWorld::citizen_overlapWithExit(double exit_x, double exit_y)
 
 bool StudentWorld::Player_overlapWithGoodies(double goodies_x, double goodies_y)
 {
-    double player_x = m_penelope->getX();   //check if player are overlap with vaccine
+    double player_x = m_penelope->getX();   //check if player are overlap with goodies
     double player_y = m_penelope->getY();
     
     if (pow(player_x - goodies_x, 2) + pow(player_y - goodies_y, 2) <= 100)  //overlap(x1-x2)^2 + (y1-y2)^2 ≤ 10^2
     {
         increaseScore(50);
+        add_flamethrower();
         return true;
     }
     return false;
+}
+
+void StudentWorld::overlapWithPit(double pit_x, double pit_y)
+{
+    double player_x = m_penelope->getX();   //check if player are overlap with pit
+    double player_y = m_penelope->getY();
     
+    if (pow(player_x - pit_x, 2) + pow(player_y - pit_y, 2) <= 100)  //overlap(x1-x2)^2 + (y1-y2)^2 ≤ 10^2
+    {
+        decLives();
+        m_penelope->setDead();
+        return;
+    }
 }
 
 void StudentWorld::fire(int x, int y, int dir)
@@ -205,7 +218,7 @@ void StudentWorld::setGame_info()
     
     //Score:    004500        Level:    27        Lives:    3        Vaccines:    2        Flames:    16        Mines:    1        Infected:    0
     oss <<"Score: " << setw(2) << getScore()<< "  Level: " <<setw(2) << getLevel() << "  Lives: " << setw(2) << getLives()
-    << "  Vaccines: " << setw(2) << 0 << "  Flames; " << setw(2) << 0 <<"  Mines: " << setw(2) << 0 << "  Infected: " << setw(2) << 0;
+    << "  Vaccines: " << setw(2) << get_vaccine() << "  Flames; " << setw(2) << get_flamethrower() <<"  Mines: " << setw(2) << get_landmines() << "  Infected: " << setw(2) << 0;
     setGameStatText(oss.str());
 }
 
