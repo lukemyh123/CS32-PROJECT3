@@ -109,7 +109,7 @@ Exit::Exit(double startX, double startY, StudentWorld *this_world)
 void Exit::doSomething()
 {
     getWorld()->Player_overlapWithExit(getX(), getY());   //If the player is overlap with Exit and no more citizen, goes to next level
-    getWorld()->check_FlameoverlapWithExit(getX(), getY()); //flame overlap with Exit, block flame
+    //getWorld()->check_FlameoverlapWithExit(getX(), getY()); //flame overlap with Exit, block flame
         //std::cout << "exit blocks flame" << std::endl;
         
     if (getWorld()->citizen_overlapWithExit(getX(), getY()) == true)  //If the citizen are overlap with Eixt, destory them ,and add score

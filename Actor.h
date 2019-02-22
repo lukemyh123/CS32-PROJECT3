@@ -18,15 +18,12 @@ public:
     virtual bool isBlockActor() = 0;
     virtual bool canBeDamagedByFlame() = 0;
     virtual bool isAFlame() { return false;}
+    virtual bool isExit(){return false;}
     virtual bool person() { return false; }
-    virtual void setActive() { active = true; }
-    virtual void setNotActive() { active = false; }
-    virtual bool getActive() { return active; }
     ~Actor();
 private:
     bool object_alive = true;
     StudentWorld* s_world;
-    bool active = false;  //for landmine
 };
 
 class Penelope : public Actor
@@ -57,6 +54,7 @@ public:
     virtual void doSomething();
     virtual bool isBlockActor() { return false; }
     virtual bool canBeDamagedByFlame() { return false; }
+    virtual bool isExit(){return true;}
 };
 
 class Pit : public Actor

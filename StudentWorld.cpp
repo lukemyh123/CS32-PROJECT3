@@ -136,20 +136,24 @@ void StudentWorld::Player_overlapWithExit(double exit_x, double exit_y)    //che
     }
 }
 
-void StudentWorld::check_FlameoverlapWithExit(double x, double y)  //Exit needs to block flame
+bool StudentWorld::ExitBlock_Flame(double x, double y)  //Exit needs to block flame
 {
     vector<Actor*>::iterator it;
     for (it = m_actors.begin(); it != m_actors.end(); it++)
     {
-        if ((*it)->isAFlame())
+        if ((*it)->isExit())
         {
-            if (pow((*it)->getX() - x, 2) + pow((*it)->getY() - y, 2) <= 100)  //overlap(x1-x2)^2 + (y1-y2)^2 ≤ 10^2
-                ExitBlockFlame = true;
-            else
-                ExitBlockFlame = false;
+            if ((x + SPRITE_WIDTH - 1) >= ((*it)->getX())
+                && (x <= ((*it)->getX() + SPRITE_WIDTH - 1))
+                && (y + SPRITE_HEIGHT - 1) >= ((*it)->getY())
+                && (y) <= ((*it)->getY() + SPRITE_HEIGHT - 1))
+            {
+                return true;
+            }
         }
-        
     }
+    
+    return false;
 }
 
 bool StudentWorld::citizen_overlapWithExit(double exit_x, double exit_y)
@@ -237,11 +241,12 @@ void StudentWorld::overlapWithPit(double pit_x, double pit_y)
 
 void StudentWorld::fire(double x, double y, int dir)
 {
+    //cout << ExitBlockFlame << endl;
     if (dir == 1)  //1 for left
     {
         for (int i = 1; i < 4; i++)
         {
-            if (check_collision(x - i * SPRITE_WIDTH, y) || ExitBlockFlame == true)
+            if (check_collision(x - i * SPRITE_WIDTH, y) || ExitBlock_Flame(x - i * SPRITE_WIDTH, y))
                 break;
             m_actors.push_back(new Flame(x - i * SPRITE_WIDTH, y, this));
         }
@@ -250,7 +255,7 @@ void StudentWorld::fire(double x, double y, int dir)
     {
         for (int i = 1; i < 4; i++)
         {
-            if (check_collision(x + i * SPRITE_WIDTH, y) || ExitBlockFlame == true)
+            if (check_collision(x + i * SPRITE_WIDTH, y) || ExitBlock_Flame(x + i * SPRITE_WIDTH, y))
                 break;
             m_actors.push_back(new Flame(x + i * SPRITE_WIDTH, y, this));
         }
@@ -259,7 +264,7 @@ void StudentWorld::fire(double x, double y, int dir)
     {
         for (int i = 1; i < 4; i++)
         {
-            if (check_collision(x, y + i * SPRITE_HEIGHT) || ExitBlockFlame == true)
+            if (check_collision(x, y + i * SPRITE_HEIGHT) || ExitBlock_Flame(x, y + i * SPRITE_HEIGHT))
                 break;
             m_actors.push_back(new Flame(x, y + i * SPRITE_HEIGHT, this));
         }
@@ -268,7 +273,7 @@ void StudentWorld::fire(double x, double y, int dir)
     {
         for (int i = 1; i < 4; i++)
         {
-            if (check_collision(x, y - i * SPRITE_HEIGHT) || ExitBlockFlame == true)
+            if (check_collision(x, y - i * SPRITE_HEIGHT) || ExitBlock_Flame(x, y - i * SPRITE_HEIGHT))
                 break;
             m_actors.push_back(new Flame(x, y - i * SPRITE_HEIGHT, this));
         }
@@ -306,28 +311,36 @@ bool StudentWorld::overlapwithLandmine(double x, double y)
 
 void StudentWorld::landmineBoom(double landmine_x, double landmine_y)
 {
-    if(!check_collision(landmine_x - SPRITE_WIDTH, landmine_y + SPRITE_HEIGHT))
+    if(!check_collision(landmine_x - SPRITE_WIDTH, landmine_y + SPRITE_HEIGHT)
+       && !ExitBlock_Flame(landmine_x - SPRITE_WIDTH, landmine_y + SPRITE_HEIGHT))
         m_actors.push_back(new Flame(landmine_x - SPRITE_WIDTH, landmine_y + SPRITE_HEIGHT, this)); //northwest
     
-    if (!check_collision(landmine_x + SPRITE_WIDTH, landmine_y))
+    if (!check_collision(landmine_x + SPRITE_WIDTH, landmine_y)
+       && !ExitBlock_Flame(landmine_x + SPRITE_WIDTH, landmine_y))
         m_actors.push_back(new Flame(landmine_x + SPRITE_WIDTH, landmine_y, this));  //east
     
-    if (!check_collision(landmine_x + SPRITE_WIDTH, landmine_y - SPRITE_HEIGHT))
+    if (!check_collision(landmine_x + SPRITE_WIDTH, landmine_y - SPRITE_HEIGHT)
+       && !ExitBlock_Flame(landmine_x + SPRITE_WIDTH, landmine_y - SPRITE_HEIGHT))
         m_actors.push_back(new Flame(landmine_x + SPRITE_WIDTH, landmine_y - SPRITE_HEIGHT, this));  //southeast
     
-    if (!check_collision(landmine_x, landmine_y - SPRITE_HEIGHT))
+    if (!check_collision(landmine_x, landmine_y - SPRITE_HEIGHT)
+        && !ExitBlock_Flame(landmine_x, landmine_y - SPRITE_HEIGHT))
         m_actors.push_back(new Flame(landmine_x, landmine_y - SPRITE_HEIGHT, this));  //south
     
-    if (!check_collision(landmine_x - SPRITE_WIDTH, landmine_y - SPRITE_HEIGHT))
+    if (!check_collision(landmine_x - SPRITE_WIDTH, landmine_y - SPRITE_HEIGHT)
+       && !ExitBlock_Flame(landmine_x - SPRITE_WIDTH, landmine_y - SPRITE_HEIGHT))
         m_actors.push_back(new Flame(landmine_x - SPRITE_WIDTH, landmine_y - SPRITE_HEIGHT, this));  //southwest
     
-    if (!check_collision(landmine_x - SPRITE_WIDTH, landmine_y))
+    if (!check_collision(landmine_x - SPRITE_WIDTH, landmine_y)
+      && !ExitBlock_Flame(landmine_x - SPRITE_WIDTH, landmine_y))
         m_actors.push_back(new Flame(landmine_x - SPRITE_WIDTH, landmine_y, this));  //west
     
-    if (!check_collision(landmine_x, landmine_y + SPRITE_HEIGHT))
+    if (!check_collision(landmine_x, landmine_y + SPRITE_HEIGHT)
+       && !ExitBlock_Flame(landmine_x, landmine_y + SPRITE_HEIGHT))
         m_actors.push_back(new Flame(landmine_x, landmine_y + SPRITE_HEIGHT, this));  //north
     
-    if (!check_collision(landmine_x + SPRITE_WIDTH, landmine_y + SPRITE_HEIGHT))
+    if (!check_collision(landmine_x + SPRITE_WIDTH, landmine_y + SPRITE_HEIGHT)
+      && !ExitBlock_Flame(landmine_x + SPRITE_WIDTH, landmine_y + SPRITE_HEIGHT))
         m_actors.push_back(new Flame(landmine_x + SPRITE_WIDTH, landmine_y + SPRITE_HEIGHT, this));  //northeast
     
     //create a pit
@@ -351,8 +364,8 @@ std::string StudentWorld::check_actorsPos(int x, int y)
 {
     Level lev(assetPath());
     ostringstream oss;
-    //oss << "level0" << getLevel() << ".txt";
-    oss << "level0" << 3 << ".txt";
+    oss << "level0" << getLevel() << ".txt";
+    //oss << "level0" << 3 << ".txt";
     string levelFile = oss.str();
     
     Level::LoadResult result = lev.loadLevel(levelFile);

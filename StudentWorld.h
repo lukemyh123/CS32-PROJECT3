@@ -20,7 +20,7 @@ public:
     
     bool check_collision(double next_x, double next_y);
     void Player_overlapWithExit(double exit_x, double exit_y);
-    void check_FlameoverlapWithExit(double x, double y);  //Exit needs to block flame
+    bool ExitBlock_Flame(double x, double y);  //Exit needs to block flame
     bool moveToNextLevel() { return go_next_level; }
     bool citizen_overlapWithExit(double exit_x, double exit_y);
     
