@@ -170,7 +170,22 @@ bool StudentWorld::check_collision(double next_x, double next_y, int dir)
 	}
 	return false;
 }
+bool StudentWorld::check_whatCanByDamagedByVomit(double x, double y)
+{
+	double player_x = m_penelope->getX();
+	double player_y = m_penelope->getY();
 
+	if (player_x == x && player_y == y)
+		return true;
+
+	/*vector<Actor*>::iterator it;
+	for (it = m_actors.begin(); it != m_actors.end(); it++)
+	{
+		if ((*it)->canBeDamagedByVomit())
+				return true;
+	}*/
+	return false;
+}
 bool StudentWorld::block_flame(double x, double y)
 {
 	vector<Actor*>::iterator it;
@@ -211,7 +226,6 @@ bool StudentWorld::citizen_overlapWithExit(double exit_x, double exit_y)
 
 void StudentWorld::overlapWithFlame(double flame_x, double flame_y)  //damage by flame
 {
-
 	double player_x = m_penelope->getX();   //check if player are overlap with Flame
 	double player_y = m_penelope->getY();
 	if (pow(player_x - flame_x, 2) + pow( player_y - flame_y, 2) <= 100)
@@ -225,6 +239,27 @@ void StudentWorld::overlapWithFlame(double flame_x, double flame_y)  //damage by
 		{
 			if (pow((*it)->getX() - flame_x, 2) + pow((*it)->getY() - flame_y, 2) <= 100)  //overlap(x1-x2)^2 + (y1-y2)^2 ≤ 10^2
 				(*it)->setDead();
+		}
+	}
+}
+
+void StudentWorld::overlapWithVomit(double vomit_x, double vomit_y)
+{
+	double player_x = m_penelope->getX();   //check if player are overlap with Flame
+	double player_y = m_penelope->getY();
+	if (pow(player_x - vomit_x, 2) + pow(player_y - vomit_y, 2) <= 100) { cout << "vomitToPlayer" << endl; }
+		//m_penelope->setDead();
+
+	vector<Actor*>::iterator it;
+
+	for (it = m_actors.begin(); it != m_actors.end(); it++)
+	{
+		if ((*it)->canBeDamagedByVomit())
+		{
+			if (pow((*it)->getX() - vomit_x, 2) + pow((*it)->getY() - vomit_y, 2) <= 100)  //overlap(x1-x2)^2 + (y1-y2)^2 ≤ 10^2
+			{
+				{ cout << "vomitToOther" << endl; }
+			}//(*it)->setDead();
 		}
 	}
 }
@@ -307,6 +342,30 @@ void StudentWorld::fire(double x, double y, int dir)
 	}
 }
 
+void StudentWorld::compute_vomit(double x, double y, int dir) 
+{
+	if (dir == 1)  //1 for left
+	{
+		if(check_whatCanByDamagedByVomit(x - SPRITE_WIDTH, y))
+			m_actors.push_back(new Vomit(x - SPRITE_WIDTH, y, this));
+	}
+	else if (dir == 2)  //2 for right
+	{
+		if (check_whatCanByDamagedByVomit(x + SPRITE_WIDTH, y))
+			m_actors.push_back(new Vomit(x + SPRITE_WIDTH, y, this));
+	}
+	else if (dir == 3) //3 for up
+	{
+		if (check_whatCanByDamagedByVomit(x, y + SPRITE_HEIGHT))
+			m_actors.push_back(new Vomit(x, y + SPRITE_HEIGHT, this));
+	}
+	else if (dir == 4) //4 for down
+	{
+		if (check_whatCanByDamagedByVomit(x, y - SPRITE_WIDTH))
+			m_actors.push_back(new Vomit(x, y - SPRITE_HEIGHT, this));
+	}
+}
+
 void StudentWorld::placeLandmine(double x, double y)
 {
 	m_actors.push_back(new Landmine(x, y, this));
@@ -364,8 +423,6 @@ void StudentWorld::landmineBoom(double landmine_x, double landmine_y)
 	//create a pit
 	m_actors.push_back(new Pit(landmine_x, landmine_y, this));
 }
-
-
 
 void StudentWorld::setGame_info()
 {

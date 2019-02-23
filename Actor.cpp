@@ -125,22 +125,34 @@ void Pit::doSomething()
 	getWorld()->overlapWithPit(getX(), getY());      //if any actors are overlap with Pit, decLives();
 }
 
-Flame::Flame(double startX, double startY, StudentWorld *this_world)
-	: Actor(IID_FLAME, startX, startY, right, 0, this_world)
-{
-	setAlive();
-}
-void Flame::doSomething()
+Projectile::Projectile(int imageID, double startX, double startY, StudentWorld *this_world)
+	:Actor(imageID, startX, startY, right, 0, this_world){setAlive();}
+bool Projectile::doSomethingCom()
 {
 	if (getStatus() == false)
-		return;
+		return false;
 
 	tick++;
-
-	getWorld()->overlapWithFlame(getX(), getY());
-
 	if (tick == 2)
 		setDead();
+
+	return true;
+}
+
+Flame::Flame(double startX, double startY, StudentWorld *this_world)
+	: Projectile(IID_FLAME, startX, startY, this_world){}
+void Flame::doSomething()
+{
+	if(Projectile::doSomethingCom())
+		getWorld()->overlapWithFlame(getX(), getY());
+}
+
+Vomit::Vomit(double startX, double startY, StudentWorld *this_world)
+	: Projectile(IID_VOMIT, startX, startY, this_world) {}
+void Vomit::doSomething()
+{
+	if (Projectile::doSomethingCom())
+		getWorld()->overlapWithVomit(getX(), getY());
 }
 
 Googie::Googie(int imageID, double startX, double startY, StudentWorld *this_world)
@@ -243,7 +255,10 @@ void DumbZombie::doSomething()
 				movement_plan--;
 			}
 			else if (getWorld()->check_collision(getX(), getY() + 1, 3))
+			{
+				getWorld()->compute_vomit(getX(), getY(), 3);
 				movement_plan = 0;
+			}
 		}
 		else if (rand_dir == 2)
 		{
@@ -254,7 +269,10 @@ void DumbZombie::doSomething()
 				movement_plan--;
 			}
 			else if (getWorld()->check_collision(getX(), getY() - 1, 4))
+			{
+				getWorld()->compute_vomit(getX(), getY(), 4);
 				movement_plan = 0;
+			}
 		}
 		else if (rand_dir == 3)
 		{
@@ -265,7 +283,10 @@ void DumbZombie::doSomething()
 				movement_plan--;
 			}
 			else if (getWorld()->check_collision(getX() - 1, getY(), 1))
+			{
+				getWorld()->compute_vomit(getX(), getY(), 1);
 				movement_plan = 0;
+			}
 		}
 		else if (rand_dir == 4)
 		{
@@ -276,7 +297,10 @@ void DumbZombie::doSomething()
 				movement_plan--;
 			}
 			else if (getWorld()->check_collision(getX() + 1, getY(), 2))
+			{
+				getWorld()->compute_vomit(getX(), getY(), 2);
 				movement_plan = 0;
+			}
 		}
 		//need to check the bounding box;
 		

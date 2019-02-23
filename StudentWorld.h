@@ -18,20 +18,24 @@ public:
 	virtual int move();
 	virtual void cleanUp();
 	
+	bool moveToNextLevel() { return go_next_level; }
+
 	bool check_collisionForPlayer(double next_x, double next_y);
 	bool check_collision(double next_x, double next_y, int dir);
 	bool check_collision_helper(double x1, double y1, double x2, double y2);
+	bool check_whatCanByDamagedByVomit(double x, double y);
+
 	bool block_flame(double x, double y);
 	void Player_overlapWithExit(double exit_x, double exit_y);
-	bool moveToNextLevel() { return go_next_level; }
 	bool citizen_overlapWithExit(double exit_x, double exit_y);
-
 	bool Player_overlapWith_Goodies(double goodies_x, double goodies_y);
 
 	void overlapWithPit(double pit_x, double pit_y);
 	void overlapWithFlame(double flame_x, double flame_y);
+	void overlapWithVomit(double vomit_x, double vomit_y);
 
 	void fire(double x, double y, int dir);
+	void compute_vomit(double x, double y, int dir);
 
 	void placeLandmine(double x, double y);
 	void landmineBoom(double landmine_x, double landmine_y);

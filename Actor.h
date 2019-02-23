@@ -17,6 +17,7 @@ public:
 	StudentWorld * getWorld() { return s_world; }
 	virtual bool isBlockActor() = 0;
 	virtual bool canBeDamagedByFlame() = 0;
+	virtual bool canBeDamagedByVomit() { return false; }
 	virtual bool canBlockFlame() { return false; }
 	virtual bool isAFlame() { return false; }
 	virtual bool person() { return false; }
@@ -34,6 +35,7 @@ public:
 	virtual void doSomething();
 	virtual bool isBlockActor() { return true; }
 	virtual bool canBeDamagedByFlame() { return true; }
+	virtual bool canBeDamagedByVomit() { return true; }
 	virtual bool person() { return true; }
 private:
 };
@@ -68,13 +70,12 @@ public:
 	virtual void doSomething();
 	virtual bool isBlockActor() { return false; }
 	virtual bool canBeDamagedByFlame() { return false; }
-
 };
 
 class Projectile:public Actor
 {
 public:
-	Projectile(double startX, double startY, StudentWorld *this_world);
+	Projectile(int imageID, double startX, double startY, StudentWorld *this_world);
 	virtual bool doSomethingCom();
 	virtual void doSomething() = 0;
 	virtual bool isBlockActor() { return false; }
@@ -92,13 +93,16 @@ public:
 	virtual bool isBlockActor() { return false; }
 	virtual bool canBeDamagedByFlame() { return false; }
 	virtual bool isAFlame() { return true; }
-
-private:
-	int tick = 0;
 };
 
-class Vomit : public Flame
+class Vomit : public Projectile
 {
+public:
+	Vomit(double startX, double startY, StudentWorld *this_world);
+	virtual void doSomething();
+	virtual bool isBlockActor() { return false; }
+	virtual bool canBeDamagedByFlame() { return false; }
+	virtual bool isAFlame() { return false; }
 };
 
 class Googie : public Actor
