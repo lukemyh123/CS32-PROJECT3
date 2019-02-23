@@ -102,27 +102,82 @@ void StudentWorld::cleanUp()
 	}
 }
 
-bool StudentWorld::check_collision(double next_x, double next_y)
+bool StudentWorld::check_collisionForPlayer(double next_x, double next_y)
+{
+	vector<Actor*>::iterator it;
+	for (it = m_actors.begin(); it != m_actors.end(); it++)
+	{
+		if ((*it)->isBlockActor() == true)
+		{
+			if ((next_x + SPRITE_WIDTH - 1) >= ((*it)->getX())
+				&& (next_x) <= ((*it)->getX() + SPRITE_WIDTH - 1)
+				&& (next_y + SPRITE_HEIGHT - 1) >= ((*it)->getY())
+				&& (next_y) <= ((*it)->getY() + SPRITE_HEIGHT - 1))
+				return true;
+		}
+	}
+	return false;
+}
+
+bool StudentWorld::check_collision(double next_x, double next_y, int dir)
 {
 	vector<Actor*>::iterator it;
 	for (it = m_actors.begin(); it != m_actors.end(); it++)
 	{
 		if ((*it)->isBlockActor() == true)  //check whether the actors are bounder boxs collision
 		{
-			if (!((*it)->getX() == next_x && (*it)->getY() == next_y - 1)			   //make sure the blocking objects don't block itself;
-				|| !((*it)->getX() == next_x -1 && (*it)->getY() == next_y))
-				//|| !((*it)->getX() == next_x && (*it)->getY() == next_y -1)
-				//|| !((*it)->getX() == next_x && (*it)->getY() == next_y +1))
+			if(dir == 1)  //1 for left
 			{
-				if ((next_x + SPRITE_WIDTH - 1) >= ((*it)->getX())
-					&& (next_x) <= ((*it)->getX() + SPRITE_WIDTH - 1)
-					&& (next_y + SPRITE_HEIGHT - 1) >= ((*it)->getY())
-					&& (next_y) <= ((*it)->getY() + SPRITE_HEIGHT - 1))
-				{
-					return true;
-				}
+				if (!((*it)->getX() == next_x + 1 && (*it)->getY() == next_y))			   //make sure the blocking objects don't block itself;
+					if (((next_x + SPRITE_WIDTH - 1) >= ((*it)->getX())                     //check any blocking objects in the vector
+						&& (next_x) <= ((*it)->getX() + SPRITE_WIDTH - 1)
+						&& (next_y + SPRITE_HEIGHT - 1) >= ((*it)->getY())
+						&& (next_y) <= ((*it)->getY() + SPRITE_HEIGHT - 1))
+						|| ((next_x + SPRITE_WIDTH - 1) >= (m_penelope->getX())           //check the player is blocking or not
+						&& (next_x) <= (m_penelope->getX() + SPRITE_WIDTH - 1)
+						&& (next_y + SPRITE_HEIGHT - 1) >= (m_penelope->getY())
+						&& (next_y) <= (m_penelope->getY() + SPRITE_HEIGHT - 1)))
+						return true;
 			}
-
+			else if (dir == 2)  //2 for right
+			{
+				if (!((*it)->getX() == next_x - 1 && (*it)->getY() == next_y))			   //make sure the blocking objects don't block itself;
+					if (((next_x + SPRITE_WIDTH - 1) >= ((*it)->getX())                    //check any blocking objects in the vector
+						&& (next_x) <= ((*it)->getX() + SPRITE_WIDTH - 1)
+						&& (next_y + SPRITE_HEIGHT - 1) >= ((*it)->getY())
+						&& (next_y) <= ((*it)->getY() + SPRITE_HEIGHT - 1))
+						|| ((next_x + SPRITE_WIDTH - 1) >= (m_penelope->getX())           //check the player is blocking or not
+							&& (next_x) <= (m_penelope->getX() + SPRITE_WIDTH - 1)
+							&& (next_y + SPRITE_HEIGHT - 1) >= (m_penelope->getY())
+							&& (next_y) <= (m_penelope->getY() + SPRITE_HEIGHT - 1)))
+						return true;
+			}
+			else if (dir == 3)  //3 for up
+			{
+				if (!((*it)->getX() == next_x && (*it)->getY() == next_y - 1))			   //make sure the blocking objects don't block itself;
+					if (((next_x + SPRITE_WIDTH - 1) >= ((*it)->getX())                    //check any blocking objects in the vector
+						&& (next_x) <= ((*it)->getX() + SPRITE_WIDTH - 1)
+						&& (next_y + SPRITE_HEIGHT - 1) >= ((*it)->getY())
+						&& (next_y) <= ((*it)->getY() + SPRITE_HEIGHT - 1))
+						|| ((next_x + SPRITE_WIDTH - 1) >= (m_penelope->getX())           //check the player is blocking or not
+							&& (next_x) <= (m_penelope->getX() + SPRITE_WIDTH - 1)
+							&& (next_y + SPRITE_HEIGHT - 1) >= (m_penelope->getY())
+							&& (next_y) <= (m_penelope->getY() + SPRITE_HEIGHT - 1)))
+						return true;
+			}
+			else if(dir == 4) //4 for down
+			{ 
+				if (!((*it)->getX() == next_x && (*it)->getY() == next_y + 1))			   //make sure the blocking objects don't block itself;
+					if (((next_x + SPRITE_WIDTH - 1) >= ((*it)->getX())                   //check any blocking objects in the vector
+						&& (next_x) <= ((*it)->getX() + SPRITE_WIDTH - 1)
+						&& (next_y + SPRITE_HEIGHT - 1) >= ((*it)->getY())
+						&& (next_y) <= ((*it)->getY() + SPRITE_HEIGHT - 1))
+						|| ((next_x + SPRITE_WIDTH - 1) >= (m_penelope->getX())          //check the player is blocking or not
+							&& (next_x) <= (m_penelope->getX() + SPRITE_WIDTH - 1)
+							&& (next_y + SPRITE_HEIGHT - 1) >= (m_penelope->getY())
+							&& (next_y) <= (m_penelope->getY() + SPRITE_HEIGHT - 1)))
+						return true;
+			}
 		}
 	}
 	return false;
@@ -210,6 +265,16 @@ void StudentWorld::overlapWithPit(double pit_x, double pit_y)
 		decLives();
 		m_penelope->setDead();
 		return;
+	}
+
+	vector<Actor*>::iterator it;
+	for (it = m_actors.begin(); it != m_actors.end(); it++)
+	{
+		if ((*it)->canBeDamagedByFlame())
+		{
+			if (pow((*it)->getX() - pit_x, 2) + pow((*it)->getY() - pit_y, 2) <= 100)  //overlap(x1-x2)^2 + (y1-y2)^2 ≤ 10^2
+				(*it)->setDead();
+		}
 	}
 }
 
@@ -330,7 +395,7 @@ std::string StudentWorld::check_actorsPos(int x, int y)
 	Level lev(assetPath());
 	ostringstream oss;
 	//oss << "level0" << getLevel() << ".txt";
-	oss << "level0" << 3 << ".txt";
+	oss << "level0" << 4 << ".txt";
 	string levelFile = oss.str();
 
 	Level::LoadResult result = lev.loadLevel(levelFile);

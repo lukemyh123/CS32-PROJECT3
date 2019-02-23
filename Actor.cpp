@@ -29,40 +29,40 @@ void Penelope::doSomething()
 			if (getDirection() != left)
 			{
 				setDirection(left);
-				if (!getWorld()->check_collision(getX() - 4, getY()))
+				if (!getWorld()->check_collisionForPlayer(getX() - 4, getY()))
 					moveTo(getX() - 4, getY());
 			}
-			else if (!getWorld()->check_collision(getX() - 4, getY())) //check if the next left has blocking
+			else if (!getWorld()->check_collisionForPlayer(getX() - 4, getY())) //check if the next left has blocking
 				moveTo(getX() - 4, getY());
 			break;
 		case KEY_PRESS_RIGHT:
 			if (getDirection() != right)
 			{
 				setDirection(right);
-				if (!getWorld()->check_collision(getX() + 4, getY()))
+				if (!getWorld()->check_collisionForPlayer(getX() + 4, getY()))
 					moveTo(getX() + 4, getY());
 			}
-			else if (!getWorld()->check_collision(getX() + 4, getY())) //check if the next right has blocking
+			else if (!getWorld()->check_collisionForPlayer(getX() + 4, getY())) //check if the next right has blocking
 				moveTo(getX() + 4, getY());
 			break;
 		case KEY_PRESS_UP:
 			if (getDirection() != up)
 			{
 				setDirection(up);
-				if (!getWorld()->check_collision(getX(), getY() + 4))
+				if (!getWorld()->check_collisionForPlayer(getX(), getY() + 4))
 					moveTo(getX(), getY() + 4);
 			}
-			else if (!getWorld()->check_collision(getX(), getY() + 4))  //check if the next up has blocking
+			else if (!getWorld()->check_collisionForPlayer(getX(), getY() + 4))  //check if the next up has blocking
 				moveTo(getX(), getY() + 4);
 			break;
 		case KEY_PRESS_DOWN:
 			if (getDirection() != down)
 			{
 				setDirection(down);
-				if (!getWorld()->check_collision(getX(), getY() - 4))
+				if (!getWorld()->check_collisionForPlayer(getX(), getY() - 4))
 					moveTo(getX(), getY() - 4);
 			}
-			else if (!getWorld()->check_collision(getX(), getY() - 4))  //check if the down has blocking
+			else if (!getWorld()->check_collisionForPlayer(getX(), getY() - 4))  //check if the down has blocking
 				moveTo(getX(), getY() - 4);
 			break;
 		case KEY_PRESS_SPACE:
@@ -221,14 +221,7 @@ void DumbZombie::doSomething()
 	if (getStatus() == false)
 		return;
 
-
-	setDirection(up);
-	if (!getWorld()->check_collision(getX(), getY() + 1))
-	{
-		moveTo(getX(), getY() + 1);
-	}
-
-	/*tick++;
+	tick++;
 
 	if (tick % 2 == 0)
 		return;
@@ -237,55 +230,55 @@ void DumbZombie::doSomething()
 	{
 		movement_plan = randInt(3, 10);
 		rand_dir = randInt(1, 4);  //random direction
-	}*/
+	}
 
-	/*if (tick % 2 != 0)
+	if (tick % 2 != 0)
 	{
 		if (rand_dir == 1)
 		{
 			setDirection(up);
-			if (!getWorld()->check_collision(getX(), getY() + 1))
+			if (!getWorld()->check_collision(getX(), getY() + 1, 3))
 			{
 				moveTo(getX(), getY() + 1);
 				movement_plan--;
 			}
-			else if (getWorld()->check_collision(getX(), getY() + 1))
+			else if (getWorld()->check_collision(getX(), getY() + 1, 3))
 				movement_plan = 0;
 		}
 		else if (rand_dir == 2)
 		{
 			setDirection(down);
-			if (!getWorld()->check_collision(getX(), getY() - 1))
+			if (!getWorld()->check_collision(getX(), getY() - 1, 4))
 			{
 				moveTo(getX(), getY() - 1);
 				movement_plan--;
 			}
-			else if (getWorld()->check_collision(getX(), getY() - 1))
+			else if (getWorld()->check_collision(getX(), getY() - 1, 4))
 				movement_plan = 0;
 		}
 		else if (rand_dir == 3)
 		{
 			setDirection(left);
-			if (!getWorld()->check_collision(getX() - 1, getY()))
+			if (!getWorld()->check_collision(getX() - 1, getY(), 1))
 			{
 				moveTo(getX() - 1, getY());
 				movement_plan--;
 			}
-			else if (getWorld()->check_collision(getX() - 1, getY()))
+			else if (getWorld()->check_collision(getX() - 1, getY(), 1))
 				movement_plan = 0;
 		}
 		else if (rand_dir == 4)
 		{
 			setDirection(right);
-			if (!getWorld()->check_collision(getX() + 1, getY()))
+			if (!getWorld()->check_collision(getX() + 1, getY(), 2))
 			{
 				moveTo(getX() + 1, getY());
 				movement_plan--;
 			}
-			else if (getWorld()->check_collision(getX() + 1, getY()))
+			else if (getWorld()->check_collision(getX() + 1, getY(), 2))
 				movement_plan = 0;
 		}
 		//need to check the bounding box;
 		
-	}*/
+	}
 }

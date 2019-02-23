@@ -17,8 +17,10 @@ public:
 	virtual int init();
 	virtual int move();
 	virtual void cleanUp();
-
-	bool check_collision(double next_x, double next_y);
+	
+	bool check_collisionForPlayer(double next_x, double next_y);
+	bool check_collision(double next_x, double next_y, int dir);
+	bool check_collision_helper(double x1, double y1, double x2, double y2, int dir);
 	bool block_flame(double x, double y);
 	void Player_overlapWithExit(double exit_x, double exit_y);
 	bool moveToNextLevel() { return go_next_level; }
