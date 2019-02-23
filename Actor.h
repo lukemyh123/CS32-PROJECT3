@@ -71,7 +71,20 @@ public:
 
 };
 
-class Flame : public Actor
+class Projectile:public Actor
+{
+public:
+	Projectile(double startX, double startY, StudentWorld *this_world);
+	virtual bool doSomethingCom();
+	virtual void doSomething() = 0;
+	virtual bool isBlockActor() { return false; }
+	virtual bool canBeDamagedByFlame() { return false; }
+	virtual bool isAFlame() = 0;
+
+private:
+	int tick = 0;
+};
+class Flame : public Projectile
 {
 public:
 	Flame(double startX, double startY, StudentWorld *this_world);
@@ -82,6 +95,10 @@ public:
 
 private:
 	int tick = 0;
+};
+
+class Vomit : public Flame
+{
 };
 
 class Googie : public Actor

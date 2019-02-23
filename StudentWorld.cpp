@@ -118,7 +118,23 @@ bool StudentWorld::check_collisionForPlayer(double next_x, double next_y)
 	}
 	return false;
 }
-
+bool StudentWorld::check_collision_helper(double x1, double y1, double next_x, double next_y)
+{
+		//make sure the blocking objects don't block itself;
+	if (((next_x + SPRITE_WIDTH - 1) >= x1                     //check any blocking objects in the vector
+		&& (next_x) <= (x1 + SPRITE_WIDTH - 1)
+		&& (next_y + SPRITE_HEIGHT - 1) >= y1
+		&& (next_y) <= (y1 + SPRITE_HEIGHT - 1))
+		|| ((next_x + SPRITE_WIDTH - 1) >= (m_penelope->getX())           //check the player is blocking or not
+			&& (next_x) <= (m_penelope->getX() + SPRITE_WIDTH - 1)
+			&& (next_y + SPRITE_HEIGHT - 1) >= (m_penelope->getY())
+			&& (next_y) <= (m_penelope->getY() + SPRITE_HEIGHT - 1)))
+	{
+		return true;
+	}
+	else
+		return false;
+}
 bool StudentWorld::check_collision(double next_x, double next_y, int dir)
 {
 	vector<Actor*>::iterator it;
@@ -128,54 +144,26 @@ bool StudentWorld::check_collision(double next_x, double next_y, int dir)
 		{
 			if(dir == 1)  //1 for left
 			{
-				if (!((*it)->getX() == next_x + 1 && (*it)->getY() == next_y))			   //make sure the blocking objects don't block itself;
-					if (((next_x + SPRITE_WIDTH - 1) >= ((*it)->getX())                     //check any blocking objects in the vector
-						&& (next_x) <= ((*it)->getX() + SPRITE_WIDTH - 1)
-						&& (next_y + SPRITE_HEIGHT - 1) >= ((*it)->getY())
-						&& (next_y) <= ((*it)->getY() + SPRITE_HEIGHT - 1))
-						|| ((next_x + SPRITE_WIDTH - 1) >= (m_penelope->getX())           //check the player is blocking or not
-						&& (next_x) <= (m_penelope->getX() + SPRITE_WIDTH - 1)
-						&& (next_y + SPRITE_HEIGHT - 1) >= (m_penelope->getY())
-						&& (next_y) <= (m_penelope->getY() + SPRITE_HEIGHT - 1)))
+				if (!((*it)->getX() == next_x + 1 && (*it)->getY() == next_y))
+					if (check_collision_helper((*it)->getX(), (*it)->getY(), next_x, next_y))
 						return true;
 			}
 			else if (dir == 2)  //2 for right
 			{
 				if (!((*it)->getX() == next_x - 1 && (*it)->getY() == next_y))			   //make sure the blocking objects don't block itself;
-					if (((next_x + SPRITE_WIDTH - 1) >= ((*it)->getX())                    //check any blocking objects in the vector
-						&& (next_x) <= ((*it)->getX() + SPRITE_WIDTH - 1)
-						&& (next_y + SPRITE_HEIGHT - 1) >= ((*it)->getY())
-						&& (next_y) <= ((*it)->getY() + SPRITE_HEIGHT - 1))
-						|| ((next_x + SPRITE_WIDTH - 1) >= (m_penelope->getX())           //check the player is blocking or not
-							&& (next_x) <= (m_penelope->getX() + SPRITE_WIDTH - 1)
-							&& (next_y + SPRITE_HEIGHT - 1) >= (m_penelope->getY())
-							&& (next_y) <= (m_penelope->getY() + SPRITE_HEIGHT - 1)))
+					if (check_collision_helper((*it)->getX(), (*it)->getY(), next_x, next_y))
 						return true;
 			}
 			else if (dir == 3)  //3 for up
 			{
 				if (!((*it)->getX() == next_x && (*it)->getY() == next_y - 1))			   //make sure the blocking objects don't block itself;
-					if (((next_x + SPRITE_WIDTH - 1) >= ((*it)->getX())                    //check any blocking objects in the vector
-						&& (next_x) <= ((*it)->getX() + SPRITE_WIDTH - 1)
-						&& (next_y + SPRITE_HEIGHT - 1) >= ((*it)->getY())
-						&& (next_y) <= ((*it)->getY() + SPRITE_HEIGHT - 1))
-						|| ((next_x + SPRITE_WIDTH - 1) >= (m_penelope->getX())           //check the player is blocking or not
-							&& (next_x) <= (m_penelope->getX() + SPRITE_WIDTH - 1)
-							&& (next_y + SPRITE_HEIGHT - 1) >= (m_penelope->getY())
-							&& (next_y) <= (m_penelope->getY() + SPRITE_HEIGHT - 1)))
+					if (check_collision_helper((*it)->getX(), (*it)->getY(), next_x, next_y))
 						return true;
 			}
 			else if(dir == 4) //4 for down
 			{ 
 				if (!((*it)->getX() == next_x && (*it)->getY() == next_y + 1))			   //make sure the blocking objects don't block itself;
-					if (((next_x + SPRITE_WIDTH - 1) >= ((*it)->getX())                   //check any blocking objects in the vector
-						&& (next_x) <= ((*it)->getX() + SPRITE_WIDTH - 1)
-						&& (next_y + SPRITE_HEIGHT - 1) >= ((*it)->getY())
-						&& (next_y) <= ((*it)->getY() + SPRITE_HEIGHT - 1))
-						|| ((next_x + SPRITE_WIDTH - 1) >= (m_penelope->getX())          //check the player is blocking or not
-							&& (next_x) <= (m_penelope->getX() + SPRITE_WIDTH - 1)
-							&& (next_y + SPRITE_HEIGHT - 1) >= (m_penelope->getY())
-							&& (next_y) <= (m_penelope->getY() + SPRITE_HEIGHT - 1)))
+					if (check_collision_helper((*it)->getX(), (*it)->getY(), next_x, next_y))
 						return true;
 			}
 		}
