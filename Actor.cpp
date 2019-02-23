@@ -221,7 +221,14 @@ void DumbZombie::doSomething()
 	if (getStatus() == false)
 		return;
 
-	tick++;
+
+	setDirection(up);
+	if (!getWorld()->check_collision(getX(), getY() + 1))
+	{
+		moveTo(getX(), getY() + 1);
+	}
+
+	/*tick++;
 
 	if (tick % 2 == 0)
 		return;
@@ -230,9 +237,9 @@ void DumbZombie::doSomething()
 	{
 		movement_plan = randInt(3, 10);
 		rand_dir = randInt(1, 4);  //random direction
-	}
+	}*/
 
-	if (tick % 2 != 0)
+	/*if (tick % 2 != 0)
 	{
 		if (rand_dir == 1)
 		{
@@ -279,6 +286,6 @@ void DumbZombie::doSomething()
 				movement_plan = 0;
 		}
 		//need to check the bounding box;
-
-	}
+		
+	}*/
 }

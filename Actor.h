@@ -17,8 +17,8 @@ public:
 	StudentWorld * getWorld() { return s_world; }
 	virtual bool isBlockActor() = 0;
 	virtual bool canBeDamagedByFlame() = 0;
+	virtual bool canBlockFlame() { return false; }
 	virtual bool isAFlame() { return false; }
-	virtual bool canKillPerson() { return false; }
 	virtual bool person() { return false; }
 
 	~Actor();
@@ -45,6 +45,8 @@ public:
 	virtual void doSomething() {}
 	virtual bool isBlockActor() { return true; }
 	virtual bool canBeDamagedByFlame() { return false; }
+	virtual bool canBlockFlame() { return true; }
+
 private:
 };
 
@@ -55,6 +57,8 @@ public:
 	virtual void doSomething();
 	virtual bool isBlockActor() { return false; }
 	virtual bool canBeDamagedByFlame() { return false; }
+	virtual bool canBlockFlame() { return true; }
+
 };
 
 class Pit : public Actor
@@ -64,7 +68,6 @@ public:
 	virtual void doSomething();
 	virtual bool isBlockActor() { return false; }
 	virtual bool canBeDamagedByFlame() { return false; }
-	virtual bool canKillPerson() { return true; }
 
 };
 

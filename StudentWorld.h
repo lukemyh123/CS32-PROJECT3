@@ -19,6 +19,7 @@ public:
 	virtual void cleanUp();
 
 	bool check_collision(double next_x, double next_y);
+	bool block_flame(double x, double y);
 	void Player_overlapWithExit(double exit_x, double exit_y);
 	bool moveToNextLevel() { return go_next_level; }
 	bool citizen_overlapWithExit(double exit_x, double exit_y);
@@ -53,7 +54,6 @@ private:
 	std::vector<Actor*> m_actors;
 	Penelope* m_penelope;
 	bool go_next_level = false;
-	bool ExitBlockFlame = false;
 	int vaccine = 0;
 	int flamethrower = 0;
 	int landmines = 0;
