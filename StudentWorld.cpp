@@ -178,7 +178,7 @@ bool StudentWorld::check_whatCanByDamagedByVomit(double x, double y)
 	double player_x = m_penelope->getX();
 	double player_y = m_penelope->getY();
 
-	if (player_x == x && player_y == y)
+	if (pow(player_x - x, 2) + pow(player_y - y, 2) <= 100)
 		return true;
 
 	/*vector<Actor*>::iterator it;
@@ -248,7 +248,8 @@ bool StudentWorld::overlapWithVomit(double vomit_x, double vomit_y)
 	double player_y = m_penelope->getY();
 	if (pow(player_x - vomit_x, 2) + pow(player_y - vomit_y, 2) <= 100)
 	{
-		m_penelope->setInfection();   //set infection
+		if(m_penelope->getInfection_status() == false)
+			m_penelope->setInfection();   //set infection
 		return true;
 	}
 
@@ -349,7 +350,7 @@ void StudentWorld::compute_vomit(double x, double y, int dir)
 {
 	if (dir == 180)  //180 for left
 	{
-		if(check_whatCanByDamagedByVomit(x - SPRITE_WIDTH, y) && !block_flameandVomit(x - SPRITE_WIDTH, y))
+		if(check_whatCanByDamagedByVomit(x - SPRITE_WIDTH, y) && !(x - SPRITE_WIDTH, y))
 			m_actors.push_back(new Vomit(x - SPRITE_WIDTH, y, this));
 	}
 	else if (dir == 0)  //0 for right
@@ -444,7 +445,7 @@ std::string StudentWorld::check_actorsPos(int x, int y)
 	Level lev(assetPath());
 	ostringstream oss;
 	//oss << "level0" << getLevel() << ".txt";
-	oss << "level0" << 4 << ".txt";
+	oss << "level0" << 3 << ".txt";
 	string levelFile = oss.str();
 
 	Level::LoadResult result = lev.loadLevel(levelFile);

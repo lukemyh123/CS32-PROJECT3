@@ -169,4 +169,9 @@ private:
 	int movement_plan;
 	int rand_dir;
 };
+
+class SmartZombie : public DumbZombie
+{
+	SmartZombie(double startX, double startY, StudentWorld *this_world);
+};
 #endif // ACTOR_H_
