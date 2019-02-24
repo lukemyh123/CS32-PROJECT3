@@ -173,6 +173,25 @@ bool StudentWorld::check_collision(double next_x, double next_y, int dir)
 	}
 	return false;
 }
+
+bool StudentWorld::check_personInFront(double next_x, double next_y)
+{
+	double player_x = m_penelope->getX();
+	double player_y = m_penelope->getY();
+	if (pow(player_x - next_x, 2) + pow(player_y - next_y, 2) <= 100)
+		return true;
+
+	vector<Actor*>::iterator it;
+	for (it = m_actors.begin(); it != m_actors.end(); it++)
+	{
+		if ((*it)->person() == true)  //check whether the actors are bounder boxs collision
+		{
+			cout << "citizen" << endl;
+		}
+	}
+
+	return false;
+}
 bool StudentWorld::check_whatCanByDamagedByVomit(double x, double y)
 {
 	double player_x = m_penelope->getX();
@@ -194,7 +213,7 @@ bool StudentWorld::block_flameandVomit(double x, double y)
 	vector<Actor*>::iterator it;
 	for (it = m_actors.begin(); it != m_actors.end(); it++)
 	{
-		if ((*it)->canBlockFlame())
+		if ((*it)->canBlockFlameandVomit())
 		{
 			if (pow((*it)->getX() - x, 2) + pow((*it)->getY() - y, 2) <= 100)
 				return true;

@@ -272,7 +272,9 @@ void DumbZombie::doSomething()
 				moveTo(getX(), getY() + 1);
 				movement_plan--;
 			}
-			else if (getWorld()->check_collision(getX(), getY() + 1, up))
+			else
+				movement_plan = 0;
+			if (getWorld()->check_personInFront(getX(), getY() + SPRITE_HEIGHT))
 			{
 				getWorld()->compute_vomit(getX(), getY(), up);
 				if (getWorld()->overlapWithVomit(getX(), getY() + SPRITE_HEIGHT))
@@ -284,7 +286,6 @@ void DumbZombie::doSomething()
 						return;
 					}
 				}
-				movement_plan = 0;
 			}
 		}
 		else if (rand_dir == 2)
@@ -295,7 +296,9 @@ void DumbZombie::doSomething()
 				moveTo(getX(), getY() - 1);
 				movement_plan--;
 			}
-			else if (getWorld()->check_collision(getX(), getY() - 1, down))
+			else
+				movement_plan = 0;
+			if (getWorld()->check_personInFront(getX(), getY() - SPRITE_HEIGHT))
 			{
 				getWorld()->compute_vomit(getX(), getY(), down);
 				if (getWorld()->overlapWithVomit(getX(), getY() - SPRITE_HEIGHT))
@@ -307,7 +310,6 @@ void DumbZombie::doSomething()
 						return;
 					}
 				}
-				movement_plan = 0;
 			}
 			
 		}
@@ -319,7 +321,9 @@ void DumbZombie::doSomething()
 				moveTo(getX() - 1, getY());
 				movement_plan--;
 			}
-			else if (getWorld()->check_collision(getX() - 1, getY(), left))
+			else
+				movement_plan = 0;
+			if (getWorld()->check_personInFront(getX() - SPRITE_WIDTH, getY()))
 			{
 				getWorld()->compute_vomit(getX(), getY(), left);
 				if (getWorld()->overlapWithVomit(getX() - SPRITE_WIDTH, getY()))
@@ -331,7 +335,6 @@ void DumbZombie::doSomething()
 						return;
 					}
 				}
-				movement_plan = 0;
 			}
 		}
 		else if (rand_dir == 4)
@@ -342,7 +345,10 @@ void DumbZombie::doSomething()
 				moveTo(getX() + 1, getY());
 				movement_plan--;
 			}
-			else if (getWorld()->check_collision(getX() + 1, getY(), right))
+			else
+				movement_plan = 0;
+
+			if (getWorld()->check_personInFront(getX() + SPRITE_WIDTH, getY()))
 			{
 				getWorld()->compute_vomit(getX(), getY(), right);
 				if (getWorld()->overlapWithVomit(getX() + SPRITE_WIDTH, getY()))
@@ -354,7 +360,6 @@ void DumbZombie::doSomething()
 						return;
 					}
 				}
-				movement_plan = 0;
 			}
 		}
 		//need to check the bounding box;

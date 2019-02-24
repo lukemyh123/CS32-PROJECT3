@@ -18,7 +18,7 @@ public:
 	virtual bool isBlockActor() = 0;
 	virtual bool canBeDamagedByFlame() = 0;
 	virtual bool canBeDamagedByVomit() { return false; }
-	virtual bool canBlockFlame() { return false; }
+	virtual bool canBlockFlameandVomit() { return false; }
 	virtual bool isAFlame() { return false; }
 	virtual bool person() { return false; }
 
@@ -53,7 +53,7 @@ public:
 	virtual void doSomething() {}
 	virtual bool isBlockActor() { return true; }
 	virtual bool canBeDamagedByFlame() { return false; }
-	virtual bool canBlockFlame() { return true; }
+	virtual bool canBlockFlameandVomit() { return true; }
 
 private:
 };
@@ -65,7 +65,7 @@ public:
 	virtual void doSomething();
 	virtual bool isBlockActor() { return false; }
 	virtual bool canBeDamagedByFlame() { return false; }
-	virtual bool canBlockFlame() { return true; }
+	virtual bool canBlockFlameandVomit() { return true; }
 
 };
 
