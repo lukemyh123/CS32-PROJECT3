@@ -36,8 +36,14 @@ public:
 	virtual bool isBlockActor() { return true; }
 	virtual bool canBeDamagedByFlame() { return true; }
 	virtual bool canBeDamagedByVomit() { return true; }
+	virtual bool getInfection_status() { return infection_status; }
+	virtual void setInfection() { infection_status = true; }
+	virtual void cureInfection() { infection_status = false; }
+	int getInfectedNumber() { return infection; }
 	virtual bool person() { return true; }
 private:
+	int infection;
+	bool infection_status;
 };
 
 class Wall : public Actor

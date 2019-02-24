@@ -12,6 +12,8 @@ Penelope::Penelope(double startX, double startY, StudentWorld *this_world)
 	: Actor(IID_PLAYER, startX, startY, right, 0, this_world)
 {
 	setAlive();
+	infection = 0;
+	infection_status = false;
 }
 
 void Penelope::doSomething()
@@ -20,6 +22,14 @@ void Penelope::doSomething()
 
 	if (getStatus() == false)
 		return;
+
+	if (getInfection_status() == true)
+		infection++;
+	else
+		infection = 0;
+
+	if (infection == 500)
+		setDead();
 
 	if (getWorld()->getKey(ch))
 	{
@@ -95,6 +105,14 @@ void Penelope::doSomething()
 			if (getWorld()->get_landmines() != 0)
 				getWorld()->placeLandmine(getX(), getY());
 			break;
+		case KEY_PRESS_ENTER:
+			if (getWorld()->get_vaccine() != 0)
+			{
+				cureInfection();
+				infection = 0;
+				getWorld()->reduce_vaccine();
+			}
+			break;
 		}
 	}
 }
@@ -152,7 +170,7 @@ Vomit::Vomit(double startX, double startY, StudentWorld *this_world)
 void Vomit::doSomething()
 {
 	if (Projectile::doSomethingCom())
-		getWorld()->overlapWithVomit(getX(), getY());
+		bool temp = getWorld()->overlapWithVomit(getX(), getY());
 }
 
 Googie::Googie(int imageID, double startX, double startY, StudentWorld *this_world)
@@ -249,56 +267,93 @@ void DumbZombie::doSomething()
 		if (rand_dir == 1)
 		{
 			setDirection(up);
-			if (!getWorld()->check_collision(getX(), getY() + 1, 3))
+			if (!getWorld()->check_collision(getX(), getY() + 1, up))
 			{
 				moveTo(getX(), getY() + 1);
 				movement_plan--;
 			}
-			else if (getWorld()->check_collision(getX(), getY() + 1, 3))
+			else if (getWorld()->check_collision(getX(), getY() + 1, up))
 			{
-				getWorld()->compute_vomit(getX(), getY(), 3);
+				getWorld()->compute_vomit(getX(), getY(), up);
+				if (getWorld()->overlapWithVomit(getX(), getY() + SPRITE_HEIGHT))
+				{
+					int temp = randInt(1, 3);
+					if (temp == 1)
+					{
+						getWorld()->compute_vomit(getX(), getY(), up);
+						return;
+					}
+				}
 				movement_plan = 0;
 			}
 		}
 		else if (rand_dir == 2)
 		{
 			setDirection(down);
-			if (!getWorld()->check_collision(getX(), getY() - 1, 4))
+			if (!getWorld()->check_collision(getX(), getY() - 1, down))
 			{
 				moveTo(getX(), getY() - 1);
 				movement_plan--;
 			}
-			else if (getWorld()->check_collision(getX(), getY() - 1, 4))
+			else if (getWorld()->check_collision(getX(), getY() - 1, down))
 			{
-				getWorld()->compute_vomit(getX(), getY(), 4);
+				getWorld()->compute_vomit(getX(), getY(), down);
+				if (getWorld()->overlapWithVomit(getX(), getY() - SPRITE_HEIGHT))
+				{
+					int temp = randInt(1, 3);
+					if (temp == 1)
+					{
+						getWorld()->compute_vomit(getX(), getY(), down);
+						return;
+					}
+				}
 				movement_plan = 0;
 			}
+			
 		}
 		else if (rand_dir == 3)
 		{
 			setDirection(left);
-			if (!getWorld()->check_collision(getX() - 1, getY(), 1))
+			if (!getWorld()->check_collision(getX() - 1, getY(), left))
 			{
 				moveTo(getX() - 1, getY());
 				movement_plan--;
 			}
-			else if (getWorld()->check_collision(getX() - 1, getY(), 1))
+			else if (getWorld()->check_collision(getX() - 1, getY(), left))
 			{
-				getWorld()->compute_vomit(getX(), getY(), 1);
+				getWorld()->compute_vomit(getX(), getY(), left);
+				if (getWorld()->overlapWithVomit(getX() - SPRITE_WIDTH, getY()))
+				{
+					int temp = randInt(1, 3);
+					if (temp == 1)
+					{
+						getWorld()->compute_vomit(getX(), getY(), left);
+						return;
+					}
+				}
 				movement_plan = 0;
 			}
 		}
 		else if (rand_dir == 4)
 		{
 			setDirection(right);
-			if (!getWorld()->check_collision(getX() + 1, getY(), 2))
+			if (!getWorld()->check_collision(getX() + 1, getY(), right))
 			{
 				moveTo(getX() + 1, getY());
 				movement_plan--;
 			}
-			else if (getWorld()->check_collision(getX() + 1, getY(), 2))
+			else if (getWorld()->check_collision(getX() + 1, getY(), right))
 			{
-				getWorld()->compute_vomit(getX(), getY(), 2);
+				getWorld()->compute_vomit(getX(), getY(), right);
+				if (getWorld()->overlapWithVomit(getX() + SPRITE_WIDTH, getY()))
+				{
+					int temp = randInt(1, 3);
+					if (temp == 1)
+					{
+						getWorld()->compute_vomit(getX(), getY(), right);
+						return;
+					}
+				}
 				movement_plan = 0;
 			}
 		}
