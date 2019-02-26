@@ -256,7 +256,7 @@ void StudentWorld::overlapWithFlame(double flame_x, double flame_y)  //damage by
 
 	for (it = m_actors.begin(); it != m_actors.end(); it++)
 	{
-		if ((*it)->canBeDamagedByFlame() && !(*it)->isALandmine())
+		if ((*it)->canBeDamagedByFlame())// && !(*it)->isALandmine())
 		{
 			if (pow((*it)->getX() - flame_x, 2) + pow((*it)->getY() - flame_y, 2) <= 100)  //overlap(x1-x2)^2 + (y1-y2)^2 ≤ 10^2
 				(*it)->setDead();

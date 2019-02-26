@@ -20,7 +20,6 @@ public:
 	virtual bool canBeDamagedByVomit() { return false; }
 	virtual bool canBlockFlameandVomit() { return false; }
 	virtual bool isAFlame() { return false; }  //----------------------
-	virtual bool isALandmine() { return false; }  //--------------------
 	virtual bool person() { return false; }
 
 	~Actor();
@@ -151,7 +150,7 @@ public:
 	Landmine(double startX, double startY, StudentWorld *this_world);
 	virtual void doSomething();
 	virtual bool isBlockActor() { return false; }
-	virtual bool canBeDamagedByFlame() { return true; }
+	virtual bool canBeDamagedByFlame() { return false; }
 	virtual bool isALandmine() { return true; }
 
 private:
