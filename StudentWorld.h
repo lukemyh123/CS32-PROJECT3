@@ -63,6 +63,7 @@ public:
 private:
     std::vector<Actor*> m_actors;
     Penelope* m_penelope;
+    GameWorld* gameWorld;
     bool go_next_level = false;
     int vaccine = 0;
     int flamethrower = 0;

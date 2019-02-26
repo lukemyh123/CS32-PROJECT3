@@ -437,11 +437,11 @@ SmartZombie::SmartZombie(double startX, double startY, StudentWorld *this_world)
 void SmartZombie::doSomething()
 {
     getWorld()->searchCloestPeople(getX(), getY(), cloest_x, cloest_y, distance);
-    if(distance > 40000)
+    if(distance > 6400)
     {
         Zombie::doSomethingCom();
     }
-    else if(distance <= 40000)
+    else if(distance <= 6400)
     {
         tick++;
         

@@ -396,7 +396,7 @@ void StudentWorld::searchCloestPeople(double zombie_x, double zombie_y, double& 
 {
     double player_x = m_penelope->getX();   //search player location
     double player_y = m_penelope->getY();
-
+    
     distance = pow(player_x - zombie_x, 2) + pow(player_y - zombie_y, 2);
     cloest_x = player_x;
     cloest_y = player_y;
