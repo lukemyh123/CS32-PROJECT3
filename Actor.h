@@ -166,6 +166,10 @@ public:
     virtual bool isBlockActor() { return true; }
     virtual bool canBeDamagedByFlame() { return true; }
     virtual bool person() { return true; }
+    virtual void goLeft();
+    virtual void goRight();
+    virtual void goUp();
+    virtual void goDown();
 private:
     int tick;
     int movement_plan;
@@ -186,6 +190,7 @@ public:
     SmartZombie(double startX, double startY, StudentWorld *this_world);
     virtual void doSomething();
 private:
+    int tick;
     double cloest_x;
     double cloest_y;
     double distance;

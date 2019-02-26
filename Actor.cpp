@@ -384,6 +384,41 @@ void Zombie::doSomethingVomitCom()
         }
     }
 }
+void Zombie::goUp()
+{
+    setDirection(up);
+    if (!getWorld()->check_collision(getX(), getY() + 1, up))
+    {
+        moveTo(getX(), getY() + 1);
+    }
+}
+
+void Zombie::goDown()
+{
+    setDirection(down);
+    if (!getWorld()->check_collision(getX(), getY() - 1, down))
+    {
+        moveTo(getX(), getY() - 1);
+    }
+}
+
+void Zombie::goLeft()
+{
+    setDirection(left);
+    if (!getWorld()->check_collision(getX() - 1, getY(), left))
+    {
+        moveTo(getX() - 1, getY());
+    }
+}
+
+void Zombie::goRight()
+{
+    setDirection(right);
+    if (!getWorld()->check_collision(getX() + 1, getY(), right))
+    {
+        moveTo(getX() + 1, getY());
+    }
+}
 
 DumbZombie::DumbZombie(double startX, double startY, StudentWorld *this_world)
 :Zombie(IID_ZOMBIE, startX, startY, this_world){}
@@ -394,15 +429,102 @@ void DumbZombie::doSomething()
 }
 
 SmartZombie::SmartZombie(double startX, double startY, StudentWorld *this_world)
-:Zombie(IID_ZOMBIE, startX, startY, this_world){}
+:Zombie(IID_ZOMBIE, startX, startY, this_world)
+{
+    tick = 0;
+}
 
 void SmartZombie::doSomething()
 {
     getWorld()->searchCloestPeople(getX(), getY(), cloest_x, cloest_y, distance);
-    if(distance <= 6400)
+    if(distance > 40000)
+    {
         Zombie::doSomethingCom();
-    else
-        return;
+    }
+    else if(distance <= 40000)
+    {
+        tick++;
+        
+        if (tick % 2 == 0)
+            return;
+        
+       // if (tick % 2 != 0)
+        //{
+        if(cloest_x == getX())
+        {
+            if(cloest_y > getY())
+            {
+                Zombie::goUp();
+            }
+            else if(cloest_y < getY())
+            {
+                Zombie::goDown();
+            }
+        }
     
+        if(cloest_y == getY())
+        {
+            if(cloest_x < getY())
+            {
+                Zombie::goLeft();
+            }
+            else if(cloest_x > getY())
+            {
+                Zombie::goRight();
+            }
+        }
+        
+        if(cloest_y > getY() && cloest_x < getX())  //up left
+        {
+            int randDir = randInt(1, 2);
+            if(randDir == 1)  //horizontal
+            {
+                Zombie::goLeft();
+            }
+            else             //vertical
+            {
+                Zombie::goUp();
+            }
+        }
+        if(cloest_y > getY() && cloest_x > getX()) // up right
+        {
+            int randDir = randInt(1, 2);
+            if(randDir == 1)  //horizontal
+            {
+                Zombie::goRight();
+            }
+            else             //vertical
+            {
+                Zombie::goUp();
+            }
+        }
+        if(cloest_y < getY() && cloest_x < getX()) //down left
+        {
+            int randDir = randInt(1, 2);
+            if(randDir == 1)  //horizontal
+            {
+                Zombie::goLeft();
+            }
+            else             //vertical
+            {
+                Zombie::goDown();
+            }
+        }
+        if(cloest_y < getY() && cloest_x > getX()) // down right
+        {
+            int randDir = randInt(1, 2);
+            if(randDir == 1)  //horizontal
+            {
+                Zombie::goRight();
+            }
+            else             //vertical
+            {
+                Zombie::goDown();
+            }
+        }
+        //Zombie::doSomethingVomitCom();
+    }
+    
+
     std::cout<< distance <<std::endl;
 }

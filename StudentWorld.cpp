@@ -485,7 +485,7 @@ std::string StudentWorld::check_actorsPos(int x, int y)
     Level lev(assetPath());
     ostringstream oss;
     //oss << "level0" << getLevel() << ".txt";
-    oss << "level0" << 3 << ".txt";
+    oss << "level0" << 4 << ".txt";
     string levelFile = oss.str();
     
     Level::LoadResult result = lev.loadLevel(levelFile);
